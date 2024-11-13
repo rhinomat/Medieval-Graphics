@@ -69,20 +69,22 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-            elif event.type == KEYDOWN:
-                if event.key == K_LEFT:
-                    rotation_y -= 5
-                elif event.key == K_RIGHT:
-                    rotation_y += 5
-                elif event.key == K_UP:
-                    rotation_x -= 5
-                elif event.key == K_DOWN:
-                    rotation_x += 5
+
+        # Check the state of all keys
+        keys = pygame.key.get_pressed()
+        if keys[K_LEFT]:
+            rotation_y -= 2  # Rotate left continuously
+        if keys[K_RIGHT]:
+            rotation_y += 2  # Rotate right continuously
+        if keys[K_UP]:
+            rotation_x -= 2  # Rotate up continuously
+        if keys[K_DOWN]:
+            rotation_x += 2  # Rotate down continuously
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         draw_model(vertices, faces, rotation_x, rotation_y)
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(60)  # Run at 60 frames per second
 
     pygame.quit()
 
