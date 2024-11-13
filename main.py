@@ -73,13 +73,13 @@ def main():
         # Check the state of all keys
         keys = pygame.key.get_pressed()
         if keys[K_LEFT]:
-            rotation_y -= 2  # Rotate left continuously
+            rotation_y -= 0.5  # Rotate left continuously
         if keys[K_RIGHT]:
-            rotation_y += 2  # Rotate right continuously
+            rotation_y += 0.5  # Rotate right continuously
         if keys[K_UP]:
-            rotation_x -= 2  # Rotate up continuously
+            rotation_x -= 0.5  # Rotate up continuously
         if keys[K_DOWN]:
-            rotation_x += 2  # Rotate down continuously
+            rotation_x += 0.5  # Rotate down continuously
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         draw_model(vertices, faces, rotation_x, rotation_y)
