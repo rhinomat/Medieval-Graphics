@@ -131,12 +131,22 @@ def main():
             rotation_x -= 2
         if keys[K_DOWN]:
             rotation_x += 2
+        if keys[K_w]:
+            pass
+        if keys[K_s]:
+            pass
+        if keys[K_a]:
+            pass
+        if keys[K_d]:
+            pass
+        if keys[K_SPACE]:
+            pass
 
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y, zoom)
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(30)
 
     pygame.quit()
 
