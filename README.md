@@ -37,4 +37,11 @@
 #### git add . 
 #### git commit -m "Message"
 #### git push
-## Note Here: Will Insert Makefile
+## Functionality to Implement (Ryan)
+### Have Spacebar reset camera
+### Have Initial Camera be further up and back
+### Implement ability to use WASD to move up, down, left and right in environment
+### Construct Pygame Button to move nav system to that of hypothetical roller coaster
+### Fix Grass Texture
+### Implement ability when r is pressed to have environment auto rotate
+### Figure out how big platform is to be
