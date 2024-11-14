@@ -75,9 +75,9 @@ def init_opengl():
     gluPerspective(45, (800 / 600), 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
 
-def draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y):
+def draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y, zoom):
     glLoadIdentity()
-    glTranslatef(0.0, 0.0, -5)
+    glTranslatef(0.0, 0.0, -5 + zoom)  # Adjust position based on zoom
 
     # Apply rotations
     glRotatef(rotation_x, 1, 0, 0)
@@ -96,6 +96,7 @@ def draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation
 
 def main():
     pygame.init()
+    pygame.display.set_caption("Amusement Park Project")
     pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
     init_opengl()
 
@@ -104,8 +105,9 @@ def main():
     texture_coords = modify_texture_coords(texture_coords, scale=2.0)  # Adjust the scale as desired
     texture_id = load_tga_texture('grass.tga')  # Path to your .tga texture file
 
-    # Initialize rotation angles
+    # Initialize rotation angles and zoom
     rotation_x, rotation_y = 0, 0
+    zoom = 0
 
     clock = pygame.time.Clock()
     running = True
@@ -113,6 +115,11 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+            elif event.type == MOUSEBUTTONDOWN:
+                if event.button == 4:  # Scroll up
+                    zoom += 0.5
+                elif event.button == 5:  # Scroll down
+                    zoom -= 0.5
 
         # Check the state of all keys
         keys = pygame.key.get_pressed()
@@ -127,7 +134,7 @@ def main():
 
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y)
+        draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y, zoom)
         pygame.display.flip()
         clock.tick(60)
 
