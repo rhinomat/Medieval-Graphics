@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import numpy as np
+from PIL import Image  # For loading .tga texture files
 
 def load_obj(file_path):
     vertices = []
@@ -11,33 +11,61 @@ def load_obj(file_path):
 
     with open(file_path, 'r') as f:
         for line in f:
-            if line.startswith('v '):  # Vertex position
+            if line.startswith('v '):
                 parts = line.split()
                 vertices.append((float(parts[1]), float(parts[2]), float(parts[3])))
-            elif line.startswith('vt '):  # Texture coordinate
+            elif line.startswith('vt '):
                 parts = line.split()
                 texture_coords.append((float(parts[1]), float(parts[2])))
-            elif line.startswith('f '):  # Face
+            elif line.startswith('f '):
                 parts = line.split()
                 face = [int(part.split('/')[0]) - 1 for part in parts[1:]]
                 tex_face = [int(part.split('/')[1]) - 1 for part in parts[1:]]
                 faces.append((face, tex_face))
 
-    return vertices, faces, texture_coords
+    return vertices, faces, normalize_texture_coords(texture_coords)
 
-def load_texture(texture_path):
-    texture_surface = pygame.image.load(texture_path)
-    texture_data = pygame.image.tostring(texture_surface, "RGB", 1)
-    width, height = texture_surface.get_size()
+def normalize_texture_coords(texture_coords):
+    min_u = min(tc[0] for tc in texture_coords)
+    max_u = max(tc[0] for tc in texture_coords)
+    min_v = min(tc[1] for tc in texture_coords)
+    max_v = max(tc[1] for tc in texture_coords)
+
+    u_range = max_u - min_u
+    v_range = max_v - min_v
+
+    # Normalize the texture coordinates to be within [0, 1]
+    normalized_coords = [
+        ((tc[0] - min_u) / u_range, (tc[1] - min_v) / v_range) for tc in texture_coords
+    ]
+    return normalized_coords
+
+def load_tga_texture(texture_path):
+    image = Image.open(texture_path)
+    image = image.convert("RGB")
+    
+    width, height = image.size
+    image_data = image.tobytes("raw", "RGB", 0, -1)
 
     glEnable(GL_TEXTURE_2D)
     texture_id = glGenTextures(1)
     glBindTexture(GL_TEXTURE_2D, texture_id)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+
+    # Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)  # Repeat horizontally
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)  # Repeat vertically
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data)
 
     return texture_id
+
+def modify_texture_coords(texture_coords, scale=2.0):
+    # Scale texture coordinates to make the texture repeat
+    modified_coords = [(u * scale, v * scale) for u, v in texture_coords]
+    return modified_coords
+
 
 def init_opengl():
     glEnable(GL_DEPTH_TEST)
@@ -62,7 +90,6 @@ def draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation
     glBegin(GL_TRIANGLES)
     for face, tex_face in faces:
         for i, vertex_idx in enumerate(face):
-            # Apply texture coordinate for each vertex
             glTexCoord2fv(texture_coords[tex_face[i]])
             glVertex3fv(vertices[vertex_idx])
     glEnd()
@@ -72,9 +99,10 @@ def main():
     pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
     init_opengl()
 
-    # Load model and texture
-    vertices, faces, texture_coords = load_obj('base_platf_2.obj')
-    texture_id = load_texture('grass.tga')  # Replace with your texture image path
+    # Load the model and texture
+    vertices, faces, texture_coords = load_obj('MainPlatform.obj')
+    texture_coords = modify_texture_coords(texture_coords, scale=2.0)  # Adjust the scale as desired
+    texture_id = load_tga_texture('grass.tga')  # Path to your .tga texture file
 
     # Initialize rotation angles
     rotation_x, rotation_y = 0, 0
@@ -89,19 +117,19 @@ def main():
         # Check the state of all keys
         keys = pygame.key.get_pressed()
         if keys[K_LEFT]:
-            rotation_y -= 2  # Rotate left continuously
+            rotation_y -= 2
         if keys[K_RIGHT]:
-            rotation_y += 2  # Rotate right continuously
+            rotation_y += 2
         if keys[K_UP]:
-            rotation_x -= 2  # Rotate up continuously
+            rotation_x -= 2
         if keys[K_DOWN]:
-            rotation_x += 2  # Rotate down continuously
+            rotation_x += 2
 
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y)
         pygame.display.flip()
-        clock.tick(60)  # Run at 60 frames per second
+        clock.tick(60)
 
     pygame.quit()
 
