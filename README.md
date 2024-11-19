@@ -30,6 +30,22 @@
 | Change the Navigation System | The navigation system now is not great. Change it to something better. To get the points in this category, you must have a mode where the viewer rides the roller-coaster.| 20 | Ride the roller coaster, hotkeys to jump to specific views (good for demos), many possibilities. |
 | Modeling using software | You can use software like Blender  or Maya to model complex objects. Based on the complexity and aesthetics of the objects, you can get extra points ranging from 10~20. (Blender is free and Maya is not.) | 10~20 | |
 | Aesthetics | You can get extra points ranging from 0 to 15 based on the aesthetics of your design. It is subjective; however, we will make grading as fair as possible. | 0~15 | |
+## Current Controls
+| Key | Function |
+| :---: | :------ |
+| W | Move Forward |
+| S | Move Backward |
+| A | Move Left|
+| D | Move Right |
+| J | Move Up|
+| K | Move Down |
+| R | Hold to Trigger Auto-Rotation |
+| Up Arrow | Rotate Up|
+| Down Arrow | Rotate Down|
+| Left Arrow | Rotate Left|
+| Right Arrow | Rotate Right|
+| Spacebar | Reset to Initial Coordinates|
+| Escape | Leave |
 ## Managing Repo
 ### To Update Changes: 
 #### git pull
@@ -38,10 +54,6 @@
 #### git commit -m "Message"
 #### git push
 ## Functionality to Implement (Ryan)
-### Have Spacebar reset camera
-### Have Initial Camera be further up and back
-### Implement ability to use WASD to move up, down, left and right in environment
 ### Construct Pygame Button to move nav system to that of hypothetical roller coaster
-### Fix Grass Texture
-### Implement ability when r is pressed to have environment auto rotate
+### Implement ability when r is pressed to have environment auto rotate (Working on it)
 ### Figure out how big platform is to be

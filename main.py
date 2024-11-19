@@ -94,6 +94,7 @@ def main():
     clock = pygame.time.Clock()
     running = True
     move_speed = 0.1  # Speed of movement
+    rot_trig = False
 
     while running:
         for event in pygame.event.get():
@@ -104,7 +105,6 @@ def main():
                     zoom += 0.5
                 elif event.button == 5:  # Scroll down
                     zoom -= 0.5
-
         # Check the state of all keys
         keys = pygame.key.get_pressed()
         if keys[K_LEFT]:
@@ -127,6 +127,8 @@ def main():
             position[1] -= move_speed  # Move up
         if keys[K_k]:
             position[1] += move_speed  # Move down
+        if keys[K_r]:
+            rot_trig = not rot_trig
         if keys[K_SPACE]:
             position = initial_position.copy()  # Reset position to initial
             rotation_x = 0
@@ -134,7 +136,8 @@ def main():
             zoom = 0
         if keys[K_ESCAPE]:
             running = False
-
+        if rot_trig is True:
+            rotation_y += move_speed
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
