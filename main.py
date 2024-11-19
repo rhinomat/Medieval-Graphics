@@ -81,7 +81,7 @@ def main():
     pygame.init()
     pygame.display.set_caption("Amusement Park Project")
     screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
-    manager = p
+    # manager = p
     init_opengl(screen_width, screen_height)
 
     # Load the model and texture
