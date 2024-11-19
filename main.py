@@ -28,7 +28,7 @@ def load_obj(file_path):
 def init_opengl(screen_width, screen_height):
     glEnable(GL_DEPTH_TEST)
     glDisable(GL_CULL_FACE)
-    glClearColor(0.5, 0.5, 0.5, 1)
+    glClearColor(0.53, 0.81, 0.92, 1)
     glMatrixMode(GL_PROJECTION)
     gluPerspective(45, (screen_width / screen_height), 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
