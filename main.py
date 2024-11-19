@@ -1,8 +1,10 @@
 import pygame
+from pygame_sdl2 import *
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
-from PIL import Image  # For loading .tga texture files
+from PIL import Image
+import sys
 
 def load_obj(file_path):
     vertices = []
@@ -23,22 +25,20 @@ def load_obj(file_path):
                 tex_face = [int(part.split('/')[1]) - 1 for part in parts[1:]]
                 faces.append((face, tex_face))
 
-    return vertices, faces, normalize_texture_coords(texture_coords)
+    return vertices, faces, texture_coords
 
-def normalize_texture_coords(texture_coords):
-    min_u = min(tc[0] for tc in texture_coords)
-    max_u = max(tc[0] for tc in texture_coords)
-    min_v = min(tc[1] for tc in texture_coords)
-    max_v = max(tc[1] for tc in texture_coords)
+def init_opengl(screen_width, screen_height):
+    glEnable(GL_DEPTH_TEST)
+    glDisable(GL_CULL_FACE)
+    glClearColor(0.5, 0.5, 0.5, 1)
+    glMatrixMode(GL_PROJECTION)
+    gluPerspective(45, (screen_width / screen_height), 0.1, 50.0)
+    glMatrixMode(GL_MODELVIEW)
 
-    u_range = max_u - min_u
-    v_range = max_v - min_v
-
-    # Normalize the texture coordinates to be within [0, 1]
-    normalized_coords = [
-        ((tc[0] - min_u) / u_range, (tc[1] - min_v) / v_range) for tc in texture_coords
-    ]
-    return normalized_coords
+def modify_texture_coords(texture_coords, scale=2.0):
+    # Scale texture coordinates to make the texture repeat
+    modified_coords = [(u * scale, v * scale) for u, v in texture_coords]
+    return modified_coords
 
 def load_tga_texture(texture_path):
     image = Image.open(texture_path)
@@ -61,28 +61,7 @@ def load_tga_texture(texture_path):
 
     return texture_id
 
-def modify_texture_coords(texture_coords, scale=2.0):
-    # Scale texture coordinates to make the texture repeat
-    modified_coords = [(u * scale, v * scale) for u, v in texture_coords]
-    return modified_coords
-
-
-def init_opengl():
-    glEnable(GL_DEPTH_TEST)
-    glDisable(GL_CULL_FACE)
-    glClearColor(0.5, 0.5, 0.5, 1)
-    glMatrixMode(GL_PROJECTION)
-    gluPerspective(45, (800 / 600), 0.1, 50.0)
-    glMatrixMode(GL_MODELVIEW)
-
-def draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y, zoom):
-    glLoadIdentity()
-    glTranslatef(0.0, 0.0, -5 + zoom)  # Adjust position based on zoom
-
-    # Apply rotations
-    glRotatef(rotation_x, 1, 0, 0)
-    glRotatef(rotation_y, 0, 1, 0)
-
+def draw_model(vertices, faces, texture_coords, texture_id):
     # Bind texture
     glBindTexture(GL_TEXTURE_2D, texture_id)
 
@@ -95,10 +74,15 @@ def draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation
     glEnd()
 
 def main():
+    screen_width = 800
+    screen_height = 600
+    initial_position = [0, 2, -5]  # Initial position is 2 units up
+    position = initial_position.copy()
     pygame.init()
     pygame.display.set_caption("Amusement Park Project")
-    pygame.display.set_mode((800, 600), DOUBLEBUF | OPENGL)
-    init_opengl()
+    screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
+    manager = p
+    init_opengl(screen_width, screen_height)
 
     # Load the model and texture
     vertices, faces, texture_coords = load_obj('MainPlatform.obj')
@@ -111,6 +95,8 @@ def main():
 
     clock = pygame.time.Clock()
     running = True
+    move_speed = 0.1  # Speed of movement
+
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -132,19 +118,26 @@ def main():
         if keys[K_DOWN]:
             rotation_x += 2
         if keys[K_w]:
-            pass
+            position[2] += move_speed  # Move forward
         if keys[K_s]:
-            pass
+            position[2] -= move_speed  # Move backward
         if keys[K_a]:
-            pass
+            position[0] -= move_speed  # Move left
         if keys[K_d]:
-            pass
+            position[0] += move_speed  # Move right
         if keys[K_SPACE]:
-            pass
+            position = initial_position.copy()  # Reset position to initial
 
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        draw_model(vertices, faces, texture_coords, texture_id, rotation_x, rotation_y, zoom)
+        glLoadIdentity()
+
+        # Apply position and zoom
+        glTranslatef(position[0], position[1], position[2] + zoom)
+        glRotatef(rotation_x, 1, 0, 0)
+        glRotatef(rotation_y, 0, 1, 0)
+
+        draw_model(vertices, faces, texture_coords, texture_id)
         pygame.display.flip()
         clock.tick(30)
 
