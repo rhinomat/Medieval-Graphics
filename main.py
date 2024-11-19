@@ -1,10 +1,8 @@
 import pygame
-#from pygame_sdl2 import *
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
-import sys
 
 def load_obj(file_path):
     vertices = []
