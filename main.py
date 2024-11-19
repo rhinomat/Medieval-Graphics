@@ -1,5 +1,5 @@
 import pygame
-from pygame_sdl2 import *
+#from pygame_sdl2 import *
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -76,7 +76,7 @@ def draw_model(vertices, faces, texture_coords, texture_id):
 def main():
     screen_width = 800
     screen_height = 600
-    initial_position = [0, 2, -5]  # Initial position is 2 units up
+    initial_position = [0, -5, -30] # Start at x=0, y=-5, z=-30 bc (0,0) is top left corner
     position = initial_position.copy()
     pygame.init()
     pygame.display.set_caption("Amusement Park Project")
@@ -86,7 +86,7 @@ def main():
 
     # Load the model and texture
     vertices, faces, texture_coords = load_obj('MainPlatform.obj')
-    texture_coords = modify_texture_coords(texture_coords, scale=2.0)  # Adjust the scale as desired
+    texture_coords = modify_texture_coords(texture_coords, scale=8.0)  # Adjust the scale as desired
     texture_id = load_tga_texture('grass.tga')  # Path to your .tga texture file
 
     # Initialize rotation angles and zoom
@@ -110,23 +110,32 @@ def main():
         # Check the state of all keys
         keys = pygame.key.get_pressed()
         if keys[K_LEFT]:
-            rotation_y -= 2
+            rotation_y -= move_speed
         if keys[K_RIGHT]:
-            rotation_y += 2
+            rotation_y += move_speed
         if keys[K_UP]:
-            rotation_x -= 2
+            rotation_x -= move_speed
         if keys[K_DOWN]:
-            rotation_x += 2
+            rotation_x += move_speed
         if keys[K_w]:
             position[2] += move_speed  # Move forward
         if keys[K_s]:
             position[2] -= move_speed  # Move backward
         if keys[K_a]:
-            position[0] -= move_speed  # Move left
+            position[0] += move_speed  # Move left
         if keys[K_d]:
-            position[0] += move_speed  # Move right
+            position[0] -= move_speed  # Move right
+        if keys[K_j]:
+            position[1] -= move_speed  # Move up
+        if keys[K_k]:
+            position[1] += move_speed  # Move down
         if keys[K_SPACE]:
             position = initial_position.copy()  # Reset position to initial
+            rotation_x = 0
+            rotation_y = 0
+            zoom = 0
+        if keys[K_ESCAPE]:
+            running = False
 
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
