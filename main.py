@@ -93,7 +93,7 @@ def main():
 
     clock = pygame.time.Clock()
     running = True
-    move_speed = 0.1  # Speed of movement
+    move_speed = 2  # Speed of movement
     rot_trig = False
 
     while running:
