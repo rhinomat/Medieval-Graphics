@@ -3,7 +3,8 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
-
+import math
+import obj
 def load_obj(file_path):
     vertices = []
     faces = []
@@ -74,27 +75,25 @@ def draw_model(vertices, faces, texture_coords, texture_id):
 def main():
     screen_width = 800
     screen_height = 600
-    initial_position = [0, -5, -30] # Start at x=0, y=-5, z=-30 bc (0,0) is top left corner
-    position = initial_position.copy()
     pygame.init()
     pygame.display.set_caption("Amusement Park Project")
     screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
-    # manager = p
     init_opengl(screen_width, screen_height)
 
-    # Load the model and texture
-    vertices, faces, texture_coords = load_obj('MainPlatform.obj')
-    texture_coords = modify_texture_coords(texture_coords, scale=8.0)  # Adjust the scale as desired
-    texture_id = load_tga_texture('grass.tga')  # Path to your .tga texture file
+    object_1 = obj.object()
+    object_1.load_file('MainPlatform.obj')
+    object_1.scale_texture(8.0)
+    object_1.load_texture('grass.tga')
 
-    # Initialize rotation angles and zoom
-    rotation_x, rotation_y = 0, 0
-    zoom = 0
+    # Camera parameters
+    camera_radius = 40
+    camera_angle_x = 45
+    camera_angle_y = 0
+    target_position = [0, 0, 0]  # Center of the object
 
     clock = pygame.time.Clock()
     running = True
     move_speed = 2  # Speed of movement
-    rot_trig = False
 
     while running:
         for event in pygame.event.get():
@@ -102,55 +101,53 @@ def main():
                 running = False
             elif event.type == MOUSEBUTTONDOWN:
                 if event.button == 4:  # Scroll up
-                    zoom += 0.5
+                    camera_radius -= 0.5
                 elif event.button == 5:  # Scroll down
-                    zoom -= 0.5
+                    camera_radius += 0.5
+
         # Check the state of all keys
         keys = pygame.key.get_pressed()
         if keys[K_LEFT]:
-            rotation_y -= move_speed
+            camera_angle_y -= move_speed
         if keys[K_RIGHT]:
-            rotation_y += move_speed
+            camera_angle_y += move_speed
         if keys[K_UP]:
-            rotation_x -= move_speed
+            camera_angle_x -= move_speed
         if keys[K_DOWN]:
-            rotation_x += move_speed
+            camera_angle_x += move_speed
         if keys[K_w]:
-            position[2] += move_speed  # Move forward
+            camera_radius -= 0.5
+            if camera_radius < 2:
+                camera_radius = 2
         if keys[K_s]:
-            position[2] -= move_speed  # Move backward
-        if keys[K_a]:
-            position[0] += move_speed  # Move left
-        if keys[K_d]:
-            position[0] -= move_speed  # Move right
-        if keys[K_j]:
-            position[1] -= move_speed  # Move up
-        if keys[K_k]:
-            position[1] += move_speed  # Move down
-        if keys[K_r]:
-            rot_trig = not rot_trig
+            camera_radius += 0.5
         if keys[K_SPACE]:
-            position = initial_position.copy()  # Reset position to initial
-            rotation_x = 0
-            rotation_y = 0
-            zoom = 0
+            # Reset camera
+            camera_radius = 20
+            camera_angle_x = 45
+            camera_angle_y = 45
         if keys[K_ESCAPE]:
             running = False
-        if rot_trig is True:
-            rotation_y += move_speed
+
         # Clear and redraw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
 
-        # Apply position and zoom
-        glTranslatef(position[0], position[1], position[2] + zoom)
-        glRotatef(rotation_x, 1, 0, 0)
-        glRotatef(rotation_y, 0, 1, 0)
+        # Calculate camera position using spherical coordinates
+        camera_x = camera_radius * math.sin(math.radians(camera_angle_y)) * math.cos(math.radians(camera_angle_x))
+        camera_y = camera_radius * math.sin(math.radians(camera_angle_x))
+        camera_z = camera_radius * math.cos(math.radians(camera_angle_y)) * math.cos(math.radians(camera_angle_x))
 
-        draw_model(vertices, faces, texture_coords, texture_id)
+        # Set up the camera
+        gluLookAt(
+            camera_x, camera_y, camera_z,  # Camera position
+            target_position[0], target_position[1], target_position[2],  # Look at the center of the object
+            0, 1, 0  # Up direction
+        )
+
+        object_1.draw()
         pygame.display.flip()
         clock.tick(30)
-
     pygame.quit()
 
 if __name__ == "__main__":
