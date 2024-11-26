@@ -33,7 +33,7 @@ class object:
                     face = [int(part.split('/')[0]) - 1 for part in parts[1:]]
                     tex_face = [int(part.split('/')[1]) - 1 for part in parts[1:]]
                     self.faces.append((face, tex_face))
-    def scale_texture(self, scale=2.0):
+    def scale_texture(self, scale=1.0):
         scaled_coords = [(u * scale, v * scale) for u, v in self.texture_coords]
         self.texture_coords = scaled_coords
     def load_texture(self, texture_path: str) -> None:
