@@ -64,3 +64,13 @@ class object:
                 glTexCoord2fv(self.texture_coords[tex_face[i]])
                 glVertex3fv(self.vertices[vertex_idx])
         glEnd()
+    def translate_draw(self, cor = None, rot = None):
+        if cor and rot:
+            glPushMatrix()
+            if len(cor) == 3:
+                glTranslatef(cor[0],cor[1],cor[2])
+            if len(rot) == 4:
+                glRotatef(rot[0],rot[1],rot[2],rot[3])
+            self.draw()
+            glPopMatrix()
+

@@ -86,6 +86,11 @@ def main():
     object_1.scale_texture(8.0)
     object_1.load_texture('grass.tga')
 
+    object_2 = obj.object()
+    object_2.load_file('ferris wheel.obj')
+    object_2.scale_texture(1)
+    object_2.load_texture('ferrisWheel.tga')
+
     # Camera parameters
     camera_radius = 40
     camera_angle_x = 45
@@ -147,6 +152,7 @@ def main():
         )
 
         object_1.draw()
+        object_2.translate_draw([3,0.25,3],[90,0,1,0])
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()
