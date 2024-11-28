@@ -88,7 +88,9 @@ def main():
 
     wall_mod = obj.object()
     wall_mod.load_file('wall.obj')
-    wall_mod.color_coords = [184/255, 127/255, 66/255]
+    #wall_mod.color_coords = [151/255, 232/255, 210/255]
+    wall_mod.load_texture('worn_brick_floor_diff_4k.jpg')
+    wall_mod.scale_texture(2)
 
     object_2 = obj.object()
     object_2.load_file('ferris wheel.obj')
@@ -156,7 +158,45 @@ def main():
         )
 
         object_1.draw()
-        wall_mod.translate_draw([19, 2.25, 0], [90, 0, 1, 0])
+        temp = wall_mod.vertices.copy()
+        ticker = 0
+        for i in range(-20, 20, 2):
+            if ticker % 2 == 0:
+                wall_mod.scale(1, 2, 1)
+                wall_mod.translate_draw([i, 2.25 * 2, 20], [0, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([i, 2.25, 20], [0, 0, 1, 0])
+            ticker += 1
+
+        for i in range(-20, 20, 2):
+            if ticker % 2 == 0:
+                wall_mod.scale(1, 2, 1)
+                wall_mod.translate_draw([i, 2.25 * 2, -20], [0, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([i, 2.25, -20], [0, 0, 1, 0])
+            ticker += 1
+
+
+        for i in range(-20, 20, 2):
+            if ticker % 2 == 0:
+                wall_mod.scale(1, 2, 1)
+                wall_mod.translate_draw([20, 2.25 * 2, i], [90, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([20, 2.25, i], [90, 0, 1, 0])
+            ticker += 1
+
+        for i in range(-20, 20, 2):
+            if ticker % 2 == 0:
+                wall_mod.scale(1, 2, 1)
+                wall_mod.translate_draw([-20, 2.25 * 2, i], [90, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([-20, 2.25, i], [90, 0, 1, 0])
+            ticker += 1
+
         object_2.translate_draw([3,0.3,3],[90,0,1,0])
         pygame.display.flip()
         clock.tick(30)
