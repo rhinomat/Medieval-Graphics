@@ -56,14 +56,25 @@ class object:
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data)
     def draw(self):
-        """Render the object using OpenGL."""
-        glBindTexture(GL_TEXTURE_2D, self.texture_id)
-        glBegin(GL_TRIANGLES)
-        for face, tex_face in self.faces:
-            for i, vertex_idx in enumerate(face):
-                glTexCoord2fv(self.texture_coords[tex_face[i]])
-                glVertex3fv(self.vertices[vertex_idx])
-        glEnd()
+        if self.texture_coords and self.texture_id is not None:
+            # Bind the texture if texture coordinates and texture ID are available
+            glBindTexture(GL_TEXTURE_2D, self.texture_id)
+            glBegin(GL_TRIANGLES)
+            for face, tex_face in self.faces:
+                for i, vertex_idx in enumerate(face):
+                    glTexCoord2fv(self.texture_coords[tex_face[i]])  # Texture coordinate
+                    glVertex3fv(self.vertices[vertex_idx])  # Vertex position
+            glEnd()
+        else:
+            # No texture; use color data if available
+            glBegin(GL_TRIANGLES)
+            for face, _ in self.faces:
+                for vertex_idx in face:
+                    if self.color_coords:  # Check for color data
+                        glColor3fv(self.color_coords)  # Apply color to the entire model
+                    glVertex3fv(self.vertices[vertex_idx])  # Vertex position
+            glEnd()
+
     def translate_draw(self, cor = None, rot = None):
         if cor and rot:
             glPushMatrix()

@@ -83,8 +83,12 @@ def main():
 
     object_1 = obj.object()
     object_1.load_file('MainPlatform.obj')
-    object_1.scale_texture(8.0)
+    object_1.scale_texture(10.0)
     object_1.load_texture('grass.tga')
+
+    wall_mod = obj.object()
+    wall_mod.load_file('wall.obj')
+    wall_mod.color_coords = [184/255, 127/255, 66/255]
 
     object_2 = obj.object()
     object_2.load_file('ferris wheel.obj')
@@ -152,7 +156,8 @@ def main():
         )
 
         object_1.draw()
-        object_2.translate_draw([3,0.25,3],[90,0,1,0])
+        wall_mod.translate_draw([5, 2.25, 0], [90, 0, 1, 0])
+        object_2.translate_draw([3,0.3,3],[90,0,1,0])
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()
