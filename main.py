@@ -24,8 +24,8 @@ def main():
     init_opengl(screen_width, screen_height)
 
     object_1 = obj.object()
-    object_1.load_file('MainPlatform.obj')
-    object_1.scale(2, 1, 2);
+    object_1.load_file('MainPlatform_flat.obj')
+    object_1.scale(2, 0, 2);
     object_1.scale_texture(20.0)
     object_1.load_texture('grass.tga')
 
@@ -34,6 +34,11 @@ def main():
     #wall_mod.color_coords = [151/255, 232/255, 210/255]
     wall_mod.load_texture('worn_brick_floor_diff_4k.jpg')
     wall_mod.scale_texture(2)
+
+    road_plat = obj.object()
+    road_plat.load_file('road_plat.obj')
+    road_plat.load_texture('road.png')
+    road_plat.scale_texture(1.5)
 
     object_2 = obj.object()
     object_2.load_file('ferris wheel.obj')
@@ -139,6 +144,9 @@ def main():
                 wall_mod.vertices = temp.copy()
                 wall_mod.translate_draw([-20, 2.25, i], [90, 0, 1, 0])
             ticker += 1
+
+        for i in range(-20, 20, 2):
+            road_plat.translate_draw([i, 1, 0], [90, 0, 1, 0])
 
         object_2.translate_draw([3,0.3,3],[90,0,1,0])
         pygame.display.flip()
