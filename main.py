@@ -40,10 +40,17 @@ def main():
     road_plat.load_texture('road.png')
     road_plat.scale_texture(1.5)
 
-    object_2 = obj.object()
-    object_2.load_file('ferris wheel.obj')
-    object_2.scale_texture(1)
-    object_2.load_texture('ferrisWheel.tga')
+    wheel = obj.object()
+    wheel.load_file('wheel.obj')
+    wheel.scale_texture(1)
+    wheel.load_texture('wheel.png')
+    wheel.scale(2,2,2)
+
+    wheel_base = obj.object()
+    wheel_base.load_file('wheelBase.obj')
+    wheel_base.scale_texture(1)
+    wheel_base.load_texture('wheelBase.png')
+    wheel_base.scale(2,2,2)
 
     # Camera parameters
     camera_radius = 40
@@ -148,7 +155,8 @@ def main():
         for i in range(-20, 20, 2):
             road_plat.translate_draw([i, 1, 0], [90, 0, 1, 0])
 
-        object_2.translate_draw([3,0.3,3],[90,0,1,0])
+        wheel.translate_draw([3,0.3,3],[90,0,1,0])
+        wheel_base.translate_draw([3,0.3,3],[90,0,1,0])
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()
