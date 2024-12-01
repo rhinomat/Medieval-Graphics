@@ -46,9 +46,11 @@ def main():
 
     road_plat = obj.object()
     road_plat.load_file('road_plat.obj')
-    road_plat.load_texture('road_256.png')
+    #road_plat.load_texture('road_256.jpg')
+    
+    road_plat.fit_texture('road_tiny.png')
     road_plat.scale(2, 1, 1)
-    road_plat.scale_texture(0.8)
+    #road_plat.scale_texture(0.0001)
 
     wheel = obj.object()
     wheel.load_file('wheel.obj')

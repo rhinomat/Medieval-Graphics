@@ -85,3 +85,31 @@ class object:
 
     def scale(self, x=1.0, y=1.0, z=1.0):
         self.vertices = [(vx * x, vy * y, vz * z) for vx, vy, vz in self.vertices]
+    
+    def fit_texture(self, texture_path: str):
+        # Load the texture
+        self.load_texture(texture_path)
+
+        # Calculate the dimensions of the object
+        min_x = min(v[0] for v in self.vertices)
+        max_x = max(v[0] for v in self.vertices)
+        min_z = min(v[2] for v in self.vertices)
+        max_z = max(v[2] for v in self.vertices)
+
+        width = max_x - min_x
+        depth = max_z - min_z
+
+        # Calculate the scaling factors for the texture coordinates
+        if width == 0:
+            scale_x = 1.0
+        else:
+            scale_x = 1.0 / width
+
+        if depth == 0:
+            scale_z = 1.0
+        else:
+            scale_z = 1.0 / depth
+
+        # Apply the scaling factors to the texture coordinates
+        scaled_coords = [(u * scale_x, v * scale_z) for u, v in self.texture_coords]
+        self.texture_coords = scaled_coords
