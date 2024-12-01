@@ -1,9 +1,7 @@
-import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
-import math
 class object:
     def __init__(self):
         self.file_path : str = ""
