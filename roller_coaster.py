@@ -137,12 +137,21 @@ class Track:
 
         self.track_list = glGenLists(1)
         glNewList(self.track_list, GL_COMPILE)
-        glColor3f(0.0, 1.0, 0.0)
+        glColor3f(0.0, 0.0, 1.0)
+        glPushMatrix()
+        
+        # Apply scaling
+        #glScalef(2.0, 2.0, 2.0)  # Scale the track by a factor of 2
+        glScalef(0.5, 0.1, 0.1)
+        # Apply translation
+        glTranslatef(0, 0, 0)  # Move the track by (10, 0, 10)
+        
         glBegin(GL_LINE_STRIP)
         for i in range(self.n_refined + 1):
             p = refined.evaluate_point(float(i))
             glVertex3fv(p)
         glEnd()
+        glPopMatrix()
         glEndList()
 
         self.train_list = glGenLists(1)
@@ -177,11 +186,19 @@ class Track:
             return
 
         glPushMatrix()
+        
+        # Apply scaling to the track
+        glScalef(0.1, 0.1, 0.1)  # Scale the track by a factor of 2
         glCallList(self.track_list)
 
         glPushMatrix()
+        
+        # Evaluate the cube's position on the track
         posn = self.track.evaluate_point(self.posn_on_track)
-        glTranslatef(*posn)
+        
+        # Apply the same scaling to the cube's position
+        scaled_posn = [0.1 * coord for coord in posn]
+        glTranslatef(*scaled_posn)
 
         tangent = self.track.evaluate_derivative(self.posn_on_track)
         tangent = tangent / np.linalg.norm(tangent)
