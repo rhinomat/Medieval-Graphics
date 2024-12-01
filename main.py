@@ -6,7 +6,7 @@ from PIL import Image
 import math
 import obj
 import wall
-#import roller_coaster
+import roller_coaster
 
 def init_opengl(screen_width, screen_height):
     glEnable(GL_DEPTH_TEST)
@@ -31,8 +31,8 @@ def main():
     object_1.scale_texture(20.0)
     object_1.load_texture('grass.tga')
 
-    #track = roller_coaster.Track()
-    #track.initialize()
+    track = roller_coaster.Track()
+    track.initialize()
 
     '''
     wall_mod = obj.object()
@@ -48,7 +48,7 @@ def main():
     road_plat.load_file('road_plat.obj')
     road_plat.load_texture('road_256.png')
     road_plat.scale(2, 1, 1)
-    road_plat.scale_texture(1)
+    road_plat.scale_texture(0.8)
 
     wheel = obj.object()
     wheel.load_file('wheel.obj')
@@ -82,7 +82,7 @@ def main():
                 elif event.button == 5:  # Scroll down
                     camera_radius += 0.5
         dt = clock.tick()
-        #track.update(dt)
+        track.update(dt)
         
         # Check the state of all keys
         keys = pygame.key.get_pressed()
@@ -100,6 +100,10 @@ def main():
                 camera_radius = 2
         if keys[K_s]:
             camera_radius += 0.5
+        if keys[K_l]:
+            pass
+        if keys[K_m]:
+            pass
         if keys[K_SPACE]:
             # Reset camera
             camera_radius = 20
@@ -123,54 +127,86 @@ def main():
             target_position[0], target_position[1], target_position[2],  # Look at the center of the object
             0, 1, 0  # Up direction
         )
-
+        glPushMatrix()
+        glColor3f(1.0, 1.0, 1.0)
         object_1.draw()
+        glPopMatrix()
         temp = wall_mod.vertices.copy()
         ticker = 0
         for i in range(-20, 20, 2):
+            glPushMatrix()
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([i, 2.25, 20], [0, 0, 1, 0])
             else:
                 wall_mod.vertices = temp.copy()
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([i, 2.25 / 2, 20], [0, 0, 1, 0])
+            glPopMatrix()
             ticker += 1
 
         for i in range(-20, 20, 2):
+            glPushMatrix()
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([i, 2.25, -20], [0, 0, 1, 0])
             else:
                 wall_mod.vertices = temp.copy()
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([i, 2.25 / 2, -20], [0, 0, 1, 0])
+            glPopMatrix()
             ticker += 1
 
 
         for i in range(-20, 20, 2):
+            glPushMatrix()
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([20, 2.25, i], [90, 0, 1, 0])
             else:
                 wall_mod.vertices = temp.copy()
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([20, 2.25 / 2, i], [90, 0, 1, 0])
+            glPopMatrix()
             ticker += 1
 
         for i in range(-20, 20, 2):
+            glPushMatrix()
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([-20, 2.25, i], [90, 0, 1, 0])
             else:
                 wall_mod.vertices = temp.copy()
+                glColor3f(1.0, 1.0, 1.0)
                 wall_mod.translate_draw([-20, 2.25 / 2, i], [90, 0, 1, 0])
+            glPopMatrix()
             ticker += 1
 
         for i in range(-20, 20, 2):
+            glPushMatrix()
+            glColor3f(1.0, 1.0, 1.0)
             road_plat.translate_draw([i, 1, 0], [90, 0, 1, 0])
+            glPopMatrix()
 
+        glPushMatrix()
+        glColor3f(1.0, 1.0, 1.0)
         wheel.translate_draw([3,0.3,3],[90,0,1,0])
+        glPopMatrix()
+        
+        glPushMatrix()
+        glColor3f(1.0, 1.0, 1.0)
         wheel_base.translate_draw([3,0.3,3],[90,0,1,0])
-        #glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        #track.draw()
+        glPopMatrix()
+        
+        glPushMatrix()
+        glColor3f(1.0, 1.0, 1.0)
+        track.draw()
+        glPopMatrix()
+
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()
