@@ -5,6 +5,8 @@ from OpenGL.GLU import *
 from PIL import Image
 import math
 import obj
+import wall
+import roller_coaster
 
 def init_opengl(screen_width, screen_height):
     glEnable(GL_DEPTH_TEST)
@@ -29,16 +31,21 @@ def main():
     object_1.scale_texture(20.0)
     object_1.load_texture('grass.tga')
 
+    '''
     wall_mod = obj.object()
     wall_mod.load_file('wall.obj')
     #wall_mod.color_coords = [151/255, 232/255, 210/255]
     wall_mod.load_texture('worn_brick_floor_diff_4k.jpg')
     wall_mod.scale_texture(2)
+    '''
+
+    wall_mod = wall.wall('wall.obj', 'worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
 
     road_plat = obj.object()
     road_plat.load_file('road_plat.obj')
-    road_plat.load_texture('road.png')
-    road_plat.scale_texture(1.5)
+    road_plat.load_texture('road_256.png')
+    road_plat.scale(2, 1, 1)
+    road_plat.scale_texture(1)
 
     wheel = obj.object()
     wheel.load_file('wheel.obj')
@@ -118,38 +125,38 @@ def main():
         for i in range(-20, 20, 2):
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
-                wall_mod.translate_draw([i, 2.25 * 2, 20], [0, 0, 1, 0])
-            else:
-                wall_mod.vertices = temp.copy()
                 wall_mod.translate_draw([i, 2.25, 20], [0, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([i, 2.25 / 2, 20], [0, 0, 1, 0])
             ticker += 1
 
         for i in range(-20, 20, 2):
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
-                wall_mod.translate_draw([i, 2.25 * 2, -20], [0, 0, 1, 0])
-            else:
-                wall_mod.vertices = temp.copy()
                 wall_mod.translate_draw([i, 2.25, -20], [0, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([i, 2.25 / 2, -20], [0, 0, 1, 0])
             ticker += 1
 
 
         for i in range(-20, 20, 2):
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
-                wall_mod.translate_draw([20, 2.25 * 2, i], [90, 0, 1, 0])
-            else:
-                wall_mod.vertices = temp.copy()
                 wall_mod.translate_draw([20, 2.25, i], [90, 0, 1, 0])
+            else:
+                wall_mod.vertices = temp.copy()
+                wall_mod.translate_draw([20, 2.25 / 2, i], [90, 0, 1, 0])
             ticker += 1
 
         for i in range(-20, 20, 2):
             if ticker % 2 == 0:
                 wall_mod.scale(1, 2, 1)
-                wall_mod.translate_draw([-20, 2.25 * 2, i], [90, 0, 1, 0])
+                wall_mod.translate_draw([-20, 2.25, i], [90, 0, 1, 0])
             else:
                 wall_mod.vertices = temp.copy()
-                wall_mod.translate_draw([-20, 2.25, i], [90, 0, 1, 0])
+                wall_mod.translate_draw([-20, 2.25 / 2, i], [90, 0, 1, 0])
             ticker += 1
 
         for i in range(-20, 20, 2):
