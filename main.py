@@ -67,6 +67,18 @@ def main():
     tree.load_file('tree.obj')
     tree.scale_texture(1)
     tree.scale(2,2.5,2)
+
+    entrance = obj.object()
+    entrance.load_file('entrance.obj')
+    entrance.scale_texture(1)
+    entrance.load_texture('entrance.png')
+    entrance.scale(1,1,1)
+
+    exit = obj.object()
+    exit.load_file('exit.obj')
+    exit.scale_texture(1)
+    exit.load_texture('exit.png')
+    exit.scale(1,1,1)
     
     # Camera parameters
     camera_radius = 40
@@ -168,14 +180,15 @@ def main():
 
         for i in range(-20, 20, 2):
             glPushMatrix()
-            if ticker % 2 == 0:
-                wall_mod.scale(1, 2, 1)
-                glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([20, 2.25, i], [90, 0, 1, 0])
-            else:
-                wall_mod.vertices = temp.copy()
-                glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([20, 2.25 / 2, i], [90, 0, 1, 0])
+            if i != 0: #ignores entrance and exit section
+                if ticker % 2 == 0:
+                    wall_mod.scale(1, 2, 1)
+                    glColor3f(1.0, 1.0, 1.0)
+                    wall_mod.translate_draw([20, 2.25, i], [90, 0, 1, 0])
+                else:
+                    wall_mod.vertices = temp.copy()
+                    glColor3f(1.0, 1.0, 1.0)
+                    wall_mod.translate_draw([20, 2.25 / 2, i], [90, 0, 1, 0])
             glPopMatrix()
             ticker += 1
 
@@ -222,6 +235,10 @@ def main():
         tree.translate_draw([18,0.3,3],[0,0,0,0])
         tree.texture_para('spruce')
         tree.translate_draw([18,0.3,-3],[0,0,0,0])
+
+        #entrance & exit
+        entrance.translate_draw([19.5,0,0.5],[-90,0,1,0])
+        exit.translate_draw([19.5,0,-0.5],[-90,0,1,0])
         
         
         glPushMatrix()
