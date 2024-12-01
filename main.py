@@ -59,6 +59,11 @@ def main():
     wheel_base.load_texture('wheelBase.png')
     wheel_base.scale(2,2,2)
 
+    tree = obj.object()
+    tree.load_file('tree.obj')
+    tree.scale_texture(1)
+    tree.scale(1.5,2,1.5)
+    
     # Camera parameters
     camera_radius = 40
     camera_angle_x = 45
@@ -162,8 +167,20 @@ def main():
         for i in range(-20, 20, 2):
             road_plat.translate_draw([i, 1, 0], [90, 0, 1, 0])
 
+        #ferris wheel
         wheel.translate_draw([3,0.3,3],[90,0,1,0])
         wheel_base.translate_draw([3,0.3,3],[90,0,1,0])
+
+        #parameterized trees
+        tree.texture_para('birch')
+        tree.translate_draw([-15,0.3,15],[0,0,0,0])
+        tree.texture_para('oak')
+        tree.translate_draw([15,0.3,15],[0,0,0,0])
+        tree.texture_para('birch')
+        tree.translate_draw([15,0.3,-15],[0,0,0,0])
+        tree.texture_para('oak')
+        tree.translate_draw([-15,0.3,-15],[0,0,0,0])
+
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()
