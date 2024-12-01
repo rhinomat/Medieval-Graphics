@@ -47,8 +47,7 @@ def main():
     road_plat = obj.object()
     road_plat.load_file('road_plat.obj')
     #road_plat.load_texture('road_256.jpg')
-    
-    road_plat.fit_texture('road_tiny.png')
+    #road_plat.fit_texture('road_256.png')
     road_plat.scale(2, 1, 1)
     #road_plat.scale_texture(0.0001)
 
@@ -191,7 +190,7 @@ def main():
         for i in range(-20, 20, 2):
             glPushMatrix()
             glColor3f(1.0, 1.0, 1.0)
-            road_plat.translate_draw([i, 1, 0], [90, 0, 1, 0])
+            road_plat.translate_draw([i, 0.001, 0], [90, 0, 1, 0])
             glPopMatrix()
 
         glPushMatrix()

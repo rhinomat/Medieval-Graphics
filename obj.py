@@ -90,26 +90,33 @@ class object:
         # Load the texture
         self.load_texture(texture_path)
 
-        # Calculate the dimensions of the object
+        # Calculate the dimensions of the 3D object's bounding box
         min_x = min(v[0] for v in self.vertices)
         max_x = max(v[0] for v in self.vertices)
+        min_y = min(v[1] for v in self.vertices)
+        max_y = max(v[1] for v in self.vertices)
         min_z = min(v[2] for v in self.vertices)
         max_z = max(v[2] for v in self.vertices)
 
         width = max_x - min_x
+        height = max_y - min_y
         depth = max_z - min_z
 
-        # Calculate the scaling factors for the texture coordinates
-        if width == 0:
-            scale_x = 1.0
-        else:
-            scale_x = 1.0 / width
+        # Prevent division by zero
+        scale_x = 1.0 / width if width != 0 else 1.0
+        scale_y = 1.0 / height if height != 0 else 1.0
+        scale_z = 1.0 / depth if depth != 0 else 1.0
 
-        if depth == 0:
-            scale_z = 1.0
-        else:
-            scale_z = 1.0 / depth
+        # Recompute texture coordinates for 3D surfaces
+        scaled_coords = []
+        for vertex in self.vertices:
+            u = (vertex[0] - min_x) * scale_x  # Map x-coordinates to u
+            v = (vertex[1] - min_y) * scale_y  # Map y-coordinates to v
+            w = (vertex[2] - min_z) * scale_z  # Map z-coordinates to w (optional)
 
-        # Apply the scaling factors to the texture coordinates
-        scaled_coords = [(u * scale_x, v * scale_z) for u, v in self.texture_coords]
+            # Here we use the (u, w) coordinates, as OpenGL works with 2D texture coordinates.
+            # You could alternatively use (u, v) or any combination depending on your mapping needs.
+            scaled_coords.append((u, w))
+
+        # Update texture coordinates
         self.texture_coords = scaled_coords
