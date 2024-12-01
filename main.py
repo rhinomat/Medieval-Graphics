@@ -55,18 +55,18 @@ def main():
     wheel.load_file('wheel.obj')
     wheel.scale_texture(1)
     wheel.load_texture('wheel.png')
-    wheel.scale(2,2,2)
+    wheel.scale(3,3,3)
 
     wheel_base = obj.object()
     wheel_base.load_file('wheelBase.obj')
     wheel_base.scale_texture(1)
     wheel_base.load_texture('wheelBase.png')
-    wheel_base.scale(2,2,2)
+    wheel_base.scale(3,3,3)
 
     tree = obj.object()
     tree.load_file('tree.obj')
     tree.scale_texture(1)
-    tree.scale(1.5,2,1.5)
+    tree.scale(2,2.5,2)
     
     # Camera parameters
     camera_radius = 40
@@ -201,12 +201,13 @@ def main():
         #ferris wheel
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
-        wheel.translate_draw([3,0.3,3],[90,0,1,0])
+        wheel.translate_draw([0,0.3,-15],[0,0,1,0])
         glPopMatrix()
         
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
-        wheel_base.translate_draw([3,0.3,3],[90,0,1,0])
+        wheel_base.translate_draw([0,0.3,-15],[0,0,1,0])
+        glPopMatrix()
 
         #parameterized trees
         tree.texture_para('birch')
@@ -217,7 +218,11 @@ def main():
         tree.translate_draw([15,0.3,-15],[0,0,0,0])
         tree.texture_para('oak')
         tree.translate_draw([-15,0.3,-15],[0,0,0,0])
-        glPopMatrix()
+        tree.texture_para('spruce')
+        tree.translate_draw([18,0.3,3],[0,0,0,0])
+        tree.texture_para('spruce')
+        tree.translate_draw([18,0.3,-3],[0,0,0,0])
+        
         
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
