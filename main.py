@@ -6,7 +6,7 @@ from PIL import Image
 import math
 import obj
 import wall
-import roller_coaster
+#import roller_coaster
 
 def init_opengl(screen_width, screen_height):
     glEnable(GL_DEPTH_TEST)
@@ -27,9 +27,12 @@ def main():
 
     object_1 = obj.object()
     object_1.load_file('MainPlatform_flat.obj')
-    object_1.scale(2, 0, 2);
+    object_1.scale(2, 0, 2)
     object_1.scale_texture(20.0)
     object_1.load_texture('grass.tga')
+
+    #track = roller_coaster.Track()
+    #track.initialize()
 
     '''
     wall_mod = obj.object()
@@ -78,7 +81,9 @@ def main():
                     camera_radius -= 0.5
                 elif event.button == 5:  # Scroll down
                     camera_radius += 0.5
-
+        dt = clock.tick()
+        #track.update(dt)
+        
         # Check the state of all keys
         keys = pygame.key.get_pressed()
         if keys[K_LEFT]:
@@ -164,6 +169,8 @@ def main():
 
         wheel.translate_draw([3,0.3,3],[90,0,1,0])
         wheel_base.translate_draw([3,0.3,3],[90,0,1,0])
+        #glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        #track.draw()
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()
