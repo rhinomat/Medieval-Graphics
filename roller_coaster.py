@@ -92,7 +92,7 @@ class CubicBspline:
         result.c_pts = new_c
         result.loop = self.loop
 
-    def within_tolerance(self, tolerance):
+    '''def within_tolerance(self, tolerance):
         for i in range(self.n - 2):
             p1 = self.c_pts[i]
             p2 = self.c_pts[i + 1]
@@ -108,7 +108,22 @@ class CubicBspline:
             l_2p = np.linalg.norm(p2 - p)
             if l_2p > tolerance:
                 return False
+        return True'''
+    def within_tolerance(self, tolerance):
+        for i in range(self.n - 2):
+            p1 = self.c_pts[i]
+            p2 = self.c_pts[i + 1]
+            p3 = self.c_pts[i + 2]
+
+            x2_x1 = p2 - p1
+            x3_x1 = p3 - p1
+            cross_product = np.cross(x2_x1, x3_x1)
+
+            # Check if the cross product magnitude is within tolerance
+            if np.linalg.norm(cross_product) > tolerance:
+                return False
         return True
+
 
 class Track:
     TRACK_NUM_CONTROLS = 4
