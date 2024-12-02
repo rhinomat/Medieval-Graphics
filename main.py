@@ -214,12 +214,12 @@ def main():
         #ferris wheel
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
-        wheel.translate_draw([0,0.3,-15],[0,0,1,0])
+        wheel.translate_draw([0,0.3,-15],[22.5,0,0,0])
         glPopMatrix()
         
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
-        wheel_base.translate_draw([0,0.3,-15],[0,0,1,0])
+        wheel_base.translate_draw([0,0.3,-15],[0,0,0,0])
         glPopMatrix()
 
         #parameterized trees
