@@ -31,8 +31,8 @@ def main():
     object_1.scale_texture(20.0)
     object_1.load_texture('textures/grass.tga')
 
-    track = roller_coaster.Track()
-    track.initialize()
+    #track = roller_coaster.Track()
+    #track.initialize()
 
     wall_mod = wall.wall('objects/wall.obj', 'textures/worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
 
@@ -71,7 +71,8 @@ def main():
     exit.scale_texture(1)
     exit.load_texture('textures/exit.png')
     exit.scale(1,1,1)
-    
+
+    elbow = obj.object()    
     # Camera parameters
     camera_radius = 40
     camera_angle_x = 45
@@ -91,8 +92,8 @@ def main():
                     camera_radius -= 0.5
                 elif event.button == 5:  # Scroll down
                     camera_radius += 0.5
-        dt = clock.tick() / 1000.0
-        track.update(dt)
+        #dt = clock.tick() / 1000.0
+        #track.update(dt)
         
         # Check the state of all keys
         keys = pygame.key.get_pressed()
@@ -235,8 +236,10 @@ def main():
         
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
-        track.draw()
+        #track.draw()
         glPopMatrix()
+        glColor3f(1.0, 0.0, 0.0)
+        elbow.translate_draw_elbow([0, 0, 0], [0, 90, 0, 1], radius=1.0, length=2.0, angle=90, segments=20)
 
         pygame.display.flip()
         clock.tick(30)

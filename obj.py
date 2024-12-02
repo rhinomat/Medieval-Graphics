@@ -2,6 +2,8 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
+import numpy as np
+
 class object:
     def __init__(self):
         self.file_path : str = ""
@@ -14,9 +16,11 @@ class object:
         self.y : float = 0.0
         self.z : float = 0.0
         self.texture_id : int = None
+
     def __del__(self):
         if self.texture_id:
             glDeleteTextures([self.texture_id])        
+
     def load_file(self, file_path : str) -> None:
         with open(file_path, 'r') as f:
             for line in f:
@@ -31,9 +35,11 @@ class object:
                     face = [int(part.split('/')[0]) - 1 for part in parts[1:]]
                     tex_face = [int(part.split('/')[1]) - 1 for part in parts[1:]]
                     self.faces.append((face, tex_face))
+
     def scale_texture(self, scale=1.0):
         scaled_coords = [(u * scale, v * scale) for u, v in self.texture_coords]
         self.texture_coords = scaled_coords
+
     def load_texture(self, texture_path: str) -> None:
         """Load a texture from a TGA file."""
         image = Image.open(texture_path)
@@ -53,6 +59,7 @@ class object:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data)
+
     def draw(self):
         if self.texture_coords and self.texture_id is not None:
             # Bind the texture if texture coordinates and texture ID are available
@@ -93,7 +100,6 @@ class object:
         else:
             self.load_texture('textures/oak.png')
     
-
     def scale(self, x=1.0, y=1.0, z=1.0):
         self.vertices = [(vx * x, vy * y, vz * z) for vx, vy, vz in self.vertices]
     
@@ -131,3 +137,34 @@ class object:
 
         # Update texture coordinates
         self.texture_coords = scaled_coords
+
+    def swept_elbow(self, radius, length, angle, segments):
+        self.vertices = []
+        self.faces = []
+        angle_rad = np.radians(angle)
+
+        # Generate vertices for the elbow
+        for i in range(segments + 1):
+            theta = i * angle_rad / segments
+            x = radius * np.cos(theta)
+            y = radius * np.sin(theta)
+            z = length + radius * (1 - np.cos(theta))
+            self.vertices.append((x, y, z))
+
+        # Generate faces for the elbow
+        for i in range(segments):
+            self.faces.append(([i, i + 1, (i + 1) % (segments + 1)], [i, i + 1, (i + 1) % (segments + 1)]))
+
+    def draw_elbow(self, radius, length, angle, segments):
+        self.swept_elbow(radius, length, angle, segments)
+        self.draw()
+
+    def translate_draw_elbow(self, cor=None, rot=None, radius=1, length=1, angle=90, segments=20):
+        self.swept_elbow(radius, length, angle, segments)
+        glPushMatrix()
+        if cor and len(cor) == 3:
+            glTranslatef(cor[0], cor[1], cor[2])
+        if rot and len(rot) == 4:
+            glRotatef(rot[0], rot[1], rot[2], rot[3])
+        self.draw()
+        glPopMatrix()
