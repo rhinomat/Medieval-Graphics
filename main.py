@@ -26,10 +26,10 @@ def main():
     init_opengl(screen_width, screen_height)
 
     object_1 = obj.object()
-    object_1.load_file('MainPlatform_flat.obj')
+    object_1.load_file('objects/MainPlatform_flat.obj')
     object_1.scale(2, 0, 2)
     object_1.scale_texture(20.0)
-    object_1.load_texture('grass.tga')
+    object_1.load_texture('textures/grass.tga')
 
     track = roller_coaster.Track()
     track.initialize()
@@ -42,42 +42,42 @@ def main():
     wall_mod.scale_texture(2)
     '''
 
-    wall_mod = wall.wall('wall.obj', 'worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
+    wall_mod = wall.wall('objects/wall.obj', 'textures/worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
 
     road_plat = obj.object()
-    road_plat.load_file('road_plat.obj')
+    road_plat.load_file('objects/road_plat.obj')
     #road_plat.load_texture('road_256.jpg')
     #road_plat.fit_texture('road_256.png')
     road_plat.scale(2, 1, 1)
     #road_plat.scale_texture(0.0001)
 
     wheel = obj.object()
-    wheel.load_file('wheel.obj')
+    wheel.load_file('objects/wheel.obj')
     wheel.scale_texture(1)
-    wheel.load_texture('wheel.png')
+    wheel.load_texture('textures/wheel.png')
     wheel.scale(3,3,3)
 
     wheel_base = obj.object()
-    wheel_base.load_file('wheelBase.obj')
+    wheel_base.load_file('objects/wheelBase.obj')
     wheel_base.scale_texture(1)
-    wheel_base.load_texture('wheelBase.png')
+    wheel_base.load_texture('textures/wheelBase.png')
     wheel_base.scale(3,3,3)
 
     tree = obj.object()
-    tree.load_file('tree.obj')
+    tree.load_file('objects/tree.obj')
     tree.scale_texture(1)
     tree.scale(2,2.5,2)
 
     entrance = obj.object()
-    entrance.load_file('entrance.obj')
+    entrance.load_file('objects/entrance.obj')
     entrance.scale_texture(1)
-    entrance.load_texture('entrance.png')
+    entrance.load_texture('textures/entrance.png')
     entrance.scale(1,1,1)
 
     exit = obj.object()
-    exit.load_file('exit.obj')
+    exit.load_file('objects/exit.obj')
     exit.scale_texture(1)
-    exit.load_texture('exit.png')
+    exit.load_texture('textures/exit.png')
     exit.scale(1,1,1)
     
     # Camera parameters

@@ -85,13 +85,13 @@ class object:
     
     def texture_para(self,name):
         if name == 'oak':
-            self.load_texture('oak.png')
+            self.load_texture('textures/oak.png')
         elif name == 'birch':
-            self.load_texture('birch.png')
+            self.load_texture('textures/birch.png')
         elif name == 'spruce':
-            self.load_texture('spruce.png')
+            self.load_texture('textures/spruce.png')
         else:
-            self.load_texture('oak.png')
+            self.load_texture('textures/oak.png')
     
 
     def scale(self, x=1.0, y=1.0, z=1.0):
