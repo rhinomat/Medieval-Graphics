@@ -239,8 +239,7 @@ def main():
         #track.draw()
         glPopMatrix()
         glColor3f(1.0, 0.0, 0.0)
-        elbow.translate_draw_elbow([0, 0, 0], [0, 90, 0, 1], radius=1.0, length=2.0, angle=90, segments=20)
-
+        elbow.translate_draw_elbow([0, 5, 0], [0, 90, 0, 1], radius=0.5, length=0.6, angle=45, segments=20)
         pygame.display.flip()
         clock.tick(30)
     pygame.quit()

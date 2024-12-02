@@ -3,6 +3,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
 import numpy as np
+import math
 
 class object:
     def __init__(self):
@@ -141,19 +142,58 @@ class object:
     def swept_elbow(self, radius, length, angle, segments):
         self.vertices = []
         self.faces = []
-        angle_rad = np.radians(angle)
 
-        # Generate vertices for the elbow
+        # Calculate the angle step
+        angle_step = angle / segments
+        length_step = length / segments
+
+        # Generate vertices
         for i in range(segments + 1):
-            theta = i * angle_rad / segments
-            x = radius * np.cos(theta)
-            y = radius * np.sin(theta)
-            z = length + radius * (1 - np.cos(theta))
-            self.vertices.append((x, y, z))
+            theta = math.radians(i * angle_step)
+            for j in range(segments + 1):
+                phi = math.radians(j * 360 / segments)
+                x = radius * math.cos(phi)
+                y = radius * math.sin(phi)
+                z = length_step * i
+                self.vertices.append((x, y, z))
 
-        # Generate faces for the elbow
+        # Generate faces
         for i in range(segments):
-            self.faces.append(([i, i + 1, (i + 1) % (segments + 1)], [i, i + 1, (i + 1) % (segments + 1)]))
+            for j in range(segments):
+                current = i * (segments + 1) + j
+                next = current + 1
+                next_ring = (i + 1) * (segments + 1) + j
+                next_ring_next = next_ring + 1
+                self.faces.append(([current, next, next_ring], []))
+                self.faces.append(([next, next_ring_next, next_ring], []))
+    
+    def draw_cylinder(self, radius, height, segments):
+        glBegin(GL_QUAD_STRIP)
+        for i in range(segments + 1):
+            angle = 2 * math.pi * i / segments
+            x = radius * math.cos(angle)
+            y = radius * math.sin(angle)
+            glVertex3f(x, y, 0)
+            glVertex3f(x, y, height)
+        glEnd()
+
+        glBegin(GL_TRIANGLE_FAN)
+        glVertex3f(0, 0, 0)
+        for i in range(segments + 1):
+            angle = 2 * math.pi * i / segments
+            x = radius * math.cos(angle)
+            y = radius * math.sin(angle)
+            glVertex3f(x, y, 0)
+        glEnd()
+
+        glBegin(GL_TRIANGLE_FAN)
+        glVertex3f(0, 0, height)
+        for i in range(segments + 1):
+            angle = 2 * math.pi * i / segments
+            x = radius * math.cos(angle)
+            y = radius * math.sin(angle)
+            glVertex3f(x, y, height)
+        glEnd()
 
     def draw_elbow(self, radius, length, angle, segments):
         self.swept_elbow(radius, length, angle, segments)
@@ -167,4 +207,13 @@ class object:
         if rot and len(rot) == 4:
             glRotatef(rot[0], rot[1], rot[2], rot[3])
         self.draw()
+        # Draw cylinders at each end
+        glPushMatrix()
+        glTranslatef(0, 0, -length)
+        self.draw_cylinder(radius, length, segments)
+        glPopMatrix()
+        glPushMatrix()
+        glTranslatef(0, 0, length)
+        self.draw_cylinder(radius, length, segments)
+        glPopMatrix()
         glPopMatrix()
