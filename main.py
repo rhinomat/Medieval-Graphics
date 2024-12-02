@@ -34,14 +34,6 @@ def main():
     track = roller_coaster.Track()
     track.initialize()
 
-    '''
-    wall_mod = obj.object()
-    wall_mod.load_file('wall.obj')
-    #wall_mod.color_coords = [151/255, 232/255, 210/255]
-    wall_mod.load_texture('worn_brick_floor_diff_4k.jpg')
-    wall_mod.scale_texture(2)
-    '''
-
     wall_mod = wall.wall('objects/wall.obj', 'textures/worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
 
     road_plat = obj.object()
@@ -99,7 +91,7 @@ def main():
                     camera_radius -= 0.5
                 elif event.button == 5:  # Scroll down
                     camera_radius += 0.5
-        dt = clock.tick()
+        dt = clock.tick() / 1000.0
         track.update(dt)
         
         # Check the state of all keys

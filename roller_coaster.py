@@ -141,10 +141,10 @@ class Track:
         glPushMatrix()
         
         # Apply scaling
-        #glScalef(2.0, 2.0, 2.0)  # Scale the track by a factor of 2
         glScalef(0.5, 0.1, 0.1)
-        # Apply translation
-        glTranslatef(0, 0, 0)  # Move the track by (10, 0, 10)
+        
+        # Apply translation to move the track upward by 5 units
+        glTranslatef(0, 5, 0)
         
         glBegin(GL_LINE_STRIP)
         for i in range(self.n_refined + 1):
@@ -188,7 +188,11 @@ class Track:
         glPushMatrix()
         
         # Apply scaling to the track
-        glScalef(0.1, 0.1, 0.1)  # Scale the track by a factor of 2
+        glScalef(0.5, 0.1, 0.1)
+        
+        # Apply translation to move the track upward by 5 units
+        glTranslatef(0, 5, 0)
+        
         glCallList(self.track_list)
 
         glPushMatrix()
@@ -196,9 +200,10 @@ class Track:
         # Evaluate the cube's position on the track
         posn = self.track.evaluate_point(self.posn_on_track)
         
-        # Apply the same scaling to the cube's position
-        scaled_posn = [0.1 * coord for coord in posn]
-        glTranslatef(*scaled_posn)
+        # Apply the same scaling and translation to the cube's position
+        scaled_posn = [0.5 * coord for coord in posn]
+        translated_posn = [scaled_posn[0], scaled_posn[1] + 5, scaled_posn[2]]
+        glTranslatef(*translated_posn)
 
         tangent = self.track.evaluate_derivative(self.posn_on_track)
         tangent = tangent / np.linalg.norm(tangent)
