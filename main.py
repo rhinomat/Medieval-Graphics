@@ -28,13 +28,14 @@ def main():
     object_1 = obj.object()
     object_1.load_file('objects/MainPlatform.obj')
     object_1.scale(2, 0, 2)
-    object_1.scale_texture(20.0)
+    object_1.scale_texture(100)
     object_1.load_texture('textures/grass.tga')
 
     track = roller_coaster.Track()
     track.initialize()
 
-    wall_mod = wall.wall('objects/wall.obj', 'textures/worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
+    wall_short = wall.wall('objects/wall_short.obj', 'textures/Wall_short_paint.png', 1.0, 1, 1, 1)
+    wall_tall = wall.wall('objects/wall_tall.obj', 'textures/wall_tall_paint.png', 1, 1, 1, 1)
 
     road_plat = obj.object()
     road_plat.load_file('objects/road_block.obj')
@@ -140,67 +141,67 @@ def main():
         glColor3f(1.0, 1.0, 1.0)
         object_1.draw()
         glPopMatrix()
-        temp = wall_mod.vertices.copy()
         ticker = 0
-        for i in range(-20, 20, 2):
+        range_min = -19
+        range_max = 19
+        for i in range(range_min, range_max):
             glPushMatrix()
             if ticker % 2 == 0:
-                wall_mod.scale(1, 2, 1)
                 glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([i, 2.25, 20], [0, 0, 1, 0])
+                wall_tall.translate_draw([i, 0, 20], [180, 0, 1, 0])
             else:
-                wall_mod.vertices = temp.copy()
                 glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([i, 2.25 / 2, 20], [0, 0, 1, 0])
+                wall_short.translate_draw([i, 0, 20], [180, 0, 1, 0])
             glPopMatrix()
             ticker += 1
 
-        for i in range(-20, 20, 2):
+        for i in range(range_min, range_max):
             glPushMatrix()
             if ticker % 2 == 0:
-                wall_mod.scale(1, 2, 1)
                 glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([i, 2.25, -20], [0, 0, 1, 0])
+                wall_tall.translate_draw([i, 0, -20], [0, 0, 1, 0])
             else:
-                wall_mod.vertices = temp.copy()
                 glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([i, 2.25 / 2, -20], [0, 0, 1, 0])
+                wall_short.translate_draw([i, 0, -20], [0, 0, 1, 0])
             glPopMatrix()
             ticker += 1
 
 
-        for i in range(-20, 20, 2):
+        for i in range(range_min, range_max):
             glPushMatrix()
             if i != 0: #ignores entrance and exit section
                 if ticker % 2 == 0:
-                    wall_mod.scale(1, 2, 1)
                     glColor3f(1.0, 1.0, 1.0)
-                    wall_mod.translate_draw([20, 2.25, i], [90, 0, 1, 0])
+                    wall_tall.translate_draw([20, 0, i], [270, 0, 1, 0])
                 else:
-                    wall_mod.vertices = temp.copy()
                     glColor3f(1.0, 1.0, 1.0)
-                    wall_mod.translate_draw([20, 2.25 / 2, i], [90, 0, 1, 0])
+                    wall_short.translate_draw([20, 0, i], [270, 0, 1, 0])
             glPopMatrix()
             ticker += 1
 
-        for i in range(-20, 20, 2):
+        for i in range(range_min, range_max):
             glPushMatrix()
             if ticker % 2 == 0:
-                wall_mod.scale(1, 2, 1)
                 glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([-20, 2.25, i], [90, 0, 1, 0])
+                wall_tall.translate_draw([-20, 0, i], [90, 0, 1, 0])
             else:
-                wall_mod.vertices = temp.copy()
                 glColor3f(1.0, 1.0, 1.0)
-                wall_mod.translate_draw([-20, 2.25 / 2, i], [90, 0, 1, 0])
+                wall_short.translate_draw([-20, 0, i], [90, 0, 1, 0])
             glPopMatrix()
             ticker += 1
 
-        for i in range(-20, 20, 2):
+        for i in range(-20, 20):
             glPushMatrix()
             glColor3f(1.0, 1.0, 1.0)
             road_plat.translate_draw([i, 0.001, 0], [90, 0, 1, 0])
             glPopMatrix()
+
+        corner = wall.wall('objects/corner.obj', 'textures/corner.png', 1, 1, 1, 1)
+        corner.translate_draw([20, 0, 20], [0, 0, 0, 0])
+        corner.translate_draw([20, 0, -20], [0, 0, 0, 0])
+        corner.translate_draw([-20, 0, 20], [0, 0, 0, 0])
+        corner.translate_draw([-20, 0, -20], [0, 0, 0, 0])
+
 
         #ferris wheel
         glPushMatrix()
