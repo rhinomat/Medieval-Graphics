@@ -26,22 +26,20 @@ def main():
     init_opengl(screen_width, screen_height)
 
     object_1 = obj.object()
-    object_1.load_file('objects/MainPlatform_flat.obj')
+    object_1.load_file('objects/MainPlatform.obj')
     object_1.scale(2, 0, 2)
     object_1.scale_texture(20.0)
     object_1.load_texture('textures/grass.tga')
 
-    #track = roller_coaster.Track()
-    #track.initialize()
+    track = roller_coaster.Track()
+    track.initialize()
 
     wall_mod = wall.wall('objects/wall.obj', 'textures/worn_brick_floor_diff_4k.jpg', 2.0, 1, 0.5, 1)
 
     road_plat = obj.object()
-    road_plat.load_file('objects/road_plat.obj')
-    #road_plat.load_texture('road_256.jpg')
-    #road_plat.fit_texture('road_256.png')
-    road_plat.scale(2, 1, 1)
-    #road_plat.scale_texture(0.0001)
+    road_plat.load_file('objects/road_block.obj')
+    road_plat.load_texture('textures/road_block.png')
+    road_plat.scale(1, 1, 2)
 
     wheel = obj.object()
     wheel.load_file('objects/wheel.obj')
@@ -92,8 +90,8 @@ def main():
                     camera_radius -= 0.5
                 elif event.button == 5:  # Scroll down
                     camera_radius += 0.5
-        #dt = clock.tick() / 1000.0
-        #track.update(dt)
+        dt = clock.tick() / 1000.0
+        track.update(dt)
         
         # Check the state of all keys
         keys = pygame.key.get_pressed()
@@ -236,7 +234,7 @@ def main():
         
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
-        #track.draw()
+        track.draw()
         glPopMatrix()
         glColor3f(1.0, 0.0, 0.0)
         elbow.translate_draw_elbow([0, 5, 0], [0, 90, 0, 1], radius=0.5, length=0.6, angle=45, segments=20)

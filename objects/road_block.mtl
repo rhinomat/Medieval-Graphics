@@ -1,0 +1,12 @@
+# Blender 4.3.0 MTL File: 'None'
+# www.blender.org
+
+newmtl m_0897f35a-58fd-8364-2dc0-93eba2e7bfaf
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd /home/ryan/Desktop/CS447P_Final_Project_R_H/textures/road_block.png

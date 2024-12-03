@@ -156,10 +156,10 @@ class Track:
         glPushMatrix()
         
         # Apply scaling
-        glScalef(0.5, 0.1, 0.1)
+        glScalef(1, 1, 1)
         
         # Apply translation to move the track upward by 5 units
-        glTranslatef(0, 5, 0)
+        glTranslatef(0, 0, 0)
         
         glBegin(GL_LINE_STRIP)
         for i in range(self.n_refined + 1):
@@ -203,10 +203,10 @@ class Track:
         glPushMatrix()
         
         # Apply scaling to the track
-        glScalef(0.5, 0.1, 0.1)
+        glScalef(1, 1, 1)
         
         # Apply translation to move the track upward by 5 units
-        glTranslatef(0, 5, 0)
+        glTranslatef(0, 0, 0)
         
         glCallList(self.track_list)
 
