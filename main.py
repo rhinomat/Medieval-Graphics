@@ -18,8 +18,8 @@ def init_opengl(screen_width, screen_height):
     glMatrixMode(GL_MODELVIEW)
 
 def main():
-    screen_width = 800
-    screen_height = 600
+    screen_width = 1280
+    screen_height = 720
     pygame.init()
     pygame.display.set_caption("Amusement Park Project")
     screen = pygame.display.set_mode((screen_width, screen_height), DOUBLEBUF | OPENGL)
@@ -33,6 +33,7 @@ def main():
 
     track = roller_coaster.Track()
     track.initialize()
+    track.speed = 10
 
     wall_short = wall.wall('objects/wall_short.obj', 'textures/Wall_short_paint.png', 1.0, 1, 1, 1)
     wall_tall = wall.wall('objects/wall_tall.obj', 'textures/wall_tall_paint.png', 1, 1, 1, 1)
@@ -91,7 +92,7 @@ def main():
                     camera_radius -= 0.5
                 elif event.button == 5:  # Scroll down
                     camera_radius += 0.5
-        dt = clock.tick() / 1000.0
+        dt = clock.get_time() / 1000.0
         track.update(dt)
         
         # Check the state of all keys
@@ -240,7 +241,7 @@ def main():
         glColor3f(1.0, 0.0, 0.0)
         elbow.translate_draw_elbow([0, 5, 0], [0, 90, 0, 1], radius=0.5, length=0.6, angle=45, segments=20)
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(60)
     pygame.quit()
 
 if __name__ == "__main__":
