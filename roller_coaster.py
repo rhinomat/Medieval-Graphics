@@ -5,7 +5,7 @@ from OpenGL.GLU import *
 from PIL import Image
 import numpy as np
 import math
-
+import obj
 class CubicBspline:
     def __init__(self, dim=3, loop=True, num=0, c_in=None):
         self.d = dim
@@ -140,6 +140,7 @@ class Track:
         self.posn_on_track = 0.0
         self.speed = 0.0
         self.track = None
+        self.train_model = None
 
     def initialize(self):
         self.track = CubicBspline(3, True)
@@ -152,7 +153,9 @@ class Track:
 
         self.track_list = glGenLists(1)
         glNewList(self.track_list, GL_COMPILE)
+        glPushMatrix()
         glColor3f(0.0, 0.0, 1.0)
+        glPopMatrix()
         glPushMatrix()
         
         # Apply scaling
@@ -169,13 +172,19 @@ class Track:
         glPopMatrix()
         glEndList()
 
+        self.train_model = obj.object()
+        self.train_model.load_file('objects/coaster_car.obj')
+        glColor3f(0.0, 0.0, 0.0)
+
+        self.train_model.load_texture('textures/coaster_car.png')
+
         self.train_list = glGenLists(1)
-        glNewList(self.train_list, GL_COMPILE)
+        '''glNewList(self.train_list, GL_COMPILE)
         glColor3f(1.0, 0.0, 0.0)
         glBegin(GL_QUADS)
         self.draw_cube()
         glEnd()
-        glEndList()
+        glEndList()'''
 
         self.initialized = True
 
@@ -205,23 +214,24 @@ class Track:
         glCallList(self.track_list)
         glPopMatrix()
 
-
         glPushMatrix()
-        
-        # Evaluate the cube's position on the track
-        posn = self.track.evaluate_point(self.posn_on_track)
-        glTranslatef(*posn)
+        glColor3f(1.0, 1.0, 1.0)  # White, for texture application
 
+        # Bind the texture
+        glEnable(GL_TEXTURE_2D)
+        glBindTexture(GL_TEXTURE_2D, self.train_model.texture_id)
+        # Evaluate the model's position on the track
+        posn = self.track.evaluate_point(self.posn_on_track)
         tangent = self.track.evaluate_derivative(self.posn_on_track)
         tangent = tangent / np.linalg.norm(tangent)
 
-        angle = math.atan2(tangent[1], tangent[0]) * 180.0 / math.pi
-        glRotatef(angle, 0.0, 0.0, 1.0)
+        angle1 = math.atan2(tangent[1], tangent[0]) * 180.0 / math.pi
+        angle2 = math.asin(-tangent[2]) * 180.0 / math.pi
 
-        angle = math.asin(-tangent[2]) * 180.0 / math.pi
-        glRotatef(angle, 0.0, 1.0, 0.0)
 
-        glCallList(self.train_list)
+        # Draw the train model using translate_draw with combined rotation
+        self.train_model.translate_draw(cor=posn, rot=(angle1, 0, 1.0, 1.0))
+
         glPopMatrix()
 
     def update(self, dt):

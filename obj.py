@@ -82,7 +82,7 @@ class object:
             glEnd()
 
     def translate_draw(self, cor = None, rot = None):
-        if cor and rot:
+        if cor is not None and rot is not None:
             glPushMatrix()
             if len(cor) == 3:
                 glTranslatef(cor[0],cor[1],cor[2])

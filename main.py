@@ -33,7 +33,7 @@ def main():
 
     track = roller_coaster.Track()
     track.initialize()
-    track.speed = 10
+    track.speed = 0
 
     wall_short = wall.wall('objects/wall_short.obj', 'textures/Wall_short_paint.png', 1.0, 1, 1, 1)
     wall_tall = wall.wall('objects/wall_tall.obj', 'textures/wall_tall_paint.png', 1, 1, 1, 1)

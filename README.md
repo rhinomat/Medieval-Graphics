@@ -53,7 +53,20 @@
 #### git add . 
 #### git commit -m "Message"
 #### git push
-## Functionality to Implement (Ryan)
-### Construct Pygame Button to move nav system to that of hypothetical roller coaster
-### Implement ability when r is pressed to have environment auto rotate (Working on it)
-### Figure out how big platform is to be
+# Eval before grading
+## Texture Mapping
+### Check Walls, Corners, entrance, exit, ride and roller coaster car
+## Hierarchical animated model
+### if we can get ferris wheel to work, check that
+## parametric instancing
+### check trees and walls
+## Sweep Objects
+### Check archway and possibly when Ryan puts it in, elbow statues
+## Subdivision
+### Still need to do
+## Change the Navigation System
+### Still need to do
+## Modeling Using Software
+### Check everything except platform
+## Aesthetics
+### Medieval???
