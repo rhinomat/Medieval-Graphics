@@ -64,13 +64,13 @@ def main():
     entrance.load_file('objects/entrance.obj')
     entrance.scale_texture(1)
     entrance.load_texture('textures/entrance.png')
-    entrance.scale(1,1,1)
+    entrance.scale(0.5,0.5,0.5)
 
     exit = obj.object()
     exit.load_file('objects/exit.obj')
     exit.scale_texture(1)
     exit.load_texture('textures/exit.png')
-    exit.scale(1,1,1)
+    exit.scale(0.5,0.5,0.5)
 
     elbow = obj.object()    
     # Camera parameters
@@ -225,13 +225,13 @@ def main():
         tree.texture_para('oak')
         tree.translate_draw([-15,0.3,-15],[0,0,0,0])
         tree.texture_para('spruce')
-        tree.translate_draw([18,0.3,3],[0,0,0,0])
+        tree.translate_draw([18,0.3,4],[0,0,0,0])
         tree.texture_para('spruce')
-        tree.translate_draw([18,0.3,-3],[0,0,0,0])
+        tree.translate_draw([18,0.3,-4],[0,0,0,0])
 
         #entrance & exit
-        entrance.translate_draw([19.5,0,0.5],[-90,0,1,0])
-        exit.translate_draw([19.5,0,-0.5],[-90,0,1,0])
+        entrance.translate_draw([19.5,0,0.25],[-90,0,1,0])
+        exit.translate_draw([19.5,0,-0.25],[-90,0,1,0])
         
         
         glPushMatrix()
@@ -239,7 +239,24 @@ def main():
         track.draw()
         glPopMatrix()
         glColor3f(1.0, 0.0, 0.0)
-        elbow.translate_draw_elbow([0, 5, 0], [0, 90, 0, 1], radius=0.5, length=0.6, angle=45, segments=20)
+        
+
+        #arch sweep
+        seg = 4
+        rad = 3
+        cylLen = 0.6
+        cylRad = 0.5
+        cylAng = 45
+        cylSeg = 20
+        
+        th = math.pi / 2
+        for i in range(seg):
+            ang = (th / (seg-1)) * i
+            nZ = rad * math.sin(ang)
+            nY = rad * math.cos(ang) + 1.3
+            elbow.translate_draw_elbow([15, nY, nZ], [math.degrees(ang), 1, 0, 0], cylRad, cylLen, cylAng, cylSeg)
+            elbow.translate_draw_elbow([15, nY, -nZ], [-math.degrees(ang)-180, 1, 0, 0], cylRad, cylLen, cylAng, cylSeg)
+        
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()
