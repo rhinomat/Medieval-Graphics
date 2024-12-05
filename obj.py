@@ -77,7 +77,7 @@ class object:
             for face, _ in self.faces:
                 for vertex_idx in face:
                     if self.color_coords:  # Check for color data
-                        glColor3fv(self.color_coords)  # Apply color to the entire model
+                        glColor3fv(self.color_coords[vertex_idx])  # Apply color to the entire model
                     glVertex3fv(self.vertices[vertex_idx])  # Vertex position
             glEnd()
 
@@ -217,3 +217,43 @@ class object:
         self.draw_cylinder(radius, length, segments)
         glPopMatrix()
         glPopMatrix()
+
+    def subdivide(self):
+        new_vertices = []
+        new_faces = []
+        edges = {}
+
+        def get_edge_key(v1, v2):
+            return tuple(sorted((v1, v2)))
+
+        def get_edge_vertex(v1, v2):
+            edge_key = get_edge_key(v1, v2)
+            if edge_key in edges:
+                return edges[edge_key]
+            else:
+                new_vertex = (
+                    (self.vertices[v1][0] + self.vertices[v2][0]) / 2,
+                    (self.vertices[v1][1] + self.vertices[v2][1]) / 2,
+                    (self.vertices[v1][2] + self.vertices[v2][2]) / 2
+                )
+                # Normalize the new vertex to lie on the surface of a sphere
+                length = math.sqrt(new_vertex[0]**2 + new_vertex[1]**2 + new_vertex[2]**2)
+                if length != 0:
+                    new_vertex = (new_vertex[0] / length, new_vertex[1] / length, new_vertex[2] / length)
+                new_vertices.append(new_vertex)
+                edges[edge_key] = len(self.vertices) + len(new_vertices) - 1
+                return edges[edge_key]
+
+        for face, tex_face in self.faces:
+            v0, v1, v2 = face
+            a = get_edge_vertex(v0, v1)
+            b = get_edge_vertex(v1, v2)
+            c = get_edge_vertex(v2, v0)
+
+            new_faces.append(([v0, a, c], []))
+            new_faces.append(([v1, b, a], []))
+            new_faces.append(([v2, c, b], []))
+            new_faces.append(([a, b, c], []))
+
+        self.vertices.extend(new_vertices)
+        self.faces = new_faces

@@ -115,8 +115,6 @@ def main():
             camera_radius += 0.5
         if keys[K_l]:
             pass
-        if keys[K_m]:
-            pass
         if keys[K_SPACE]:
             # Reset camera
             camera_radius = 20
@@ -259,14 +257,29 @@ def main():
             elbow.translate_draw_elbow([15, nY, nZ], [math.degrees(ang), 1, 0, 0], cylRad, cylLen, cylAng, cylSeg)
             elbow.translate_draw_elbow([15, nY, -nZ], [-math.degrees(ang)-180, 1, 0, 0], cylRad, cylLen, cylAng, cylSeg)
         #end arch sweep
+        glPushMatrix()
         glColor3f(1, 1, 1)
         wand_hand = obj.object()
         wand_hand.load_file('objects/wand_hand.obj')
         wand_hand.load_texture('textures/morph_wand_handle.png')
         wand_hand.scale(10, 10, 10)
-        
         wand_hand.translate_draw([10, -2.5, 10], [0, 0, 0])
-        
+        glPopMatrix()
+        #subdivision
+        pyramid = obj.object()
+        pyramid.load_file("objects/pyramid_sub.obj")
+        #pyramid.load_texture("textures/pyramid.png")
+        sign_post = obj.object()
+        sign_post.load_file("objects/Sign_Post.obj")
+        sign_post.load_texture("textures/sign_post.png")
+        sign_post.translate_draw([12, 0, 5], [0, 0, 0, 0])
+        keys = pygame.key.get_pressed()
+        if keys[K_LALT]:
+            pyramid.subdivide()
+        glPushMatrix()
+        glColor3f(1, 0, 1)      
+        pyramid.translate_draw([10, 6.2, 6.2], [45, -1, 0, 0])
+        glPopMatrix()
         pygame.display.flip()
         clock.tick(60)
     pygame.quit()
