@@ -75,6 +75,9 @@ def main():
     exit.scale(0.5,0.5,0.5)
 
     elbow = obj.object()    
+    pyramid = obj.object()
+    pyramid.load_file("objects/pyramid_sub.obj")
+    pyramid.normalize_to_sphere()
     # Camera parameters
     camera_radius = 40
     camera_angle_x = 45
@@ -86,6 +89,9 @@ def main():
     move_speed = 2  # Speed of movement
     follow_car = False
     ride_mode = False
+    subdivision_triggered = False
+
+
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -295,16 +301,20 @@ def main():
         wand_hand.translate_draw([10, -2.5, 10], [0, 0, 0])
         glPopMatrix()
         #subdivision
-        pyramid = obj.object()
-        pyramid.load_file("objects/pyramid_sub.obj")
+        
+
         #pyramid.load_texture("textures/pyramid.png")
         sign_post = obj.object()
         sign_post.load_file("objects/Sign_Post.obj")
         sign_post.load_texture("textures/sign_post.png")
         sign_post.translate_draw([12, 0, 5], [0, 0, 0, 0])
         keys = pygame.key.get_pressed()
-        if keys[K_LALT]:
+        if keys[K_LALT] and not subdivision_triggered:
             pyramid.subdivide()
+            pyramid.normalize_to_sphere()
+            subdivision_triggered = True
+        elif not keys[K_LALT]:
+            subdivision_triggered = False
         glPushMatrix()
         glColor3f(1, 0, 1)      
         pyramid.translate_draw([10, 6.2, 6.2], [45, -1, 0, 0])

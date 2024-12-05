@@ -257,3 +257,8 @@ class object:
 
         self.vertices.extend(new_vertices)
         self.faces = new_faces
+    def normalize_to_sphere(self):
+        for i, vertex in enumerate(self.vertices):
+            length = math.sqrt(vertex[0]**2 + vertex[1]**2 + vertex[2]**2)
+            if length != 0:
+                self.vertices[i] = (vertex[0] / length, vertex[1] / length, vertex[2] / length)
