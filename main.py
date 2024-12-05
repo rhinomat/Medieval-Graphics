@@ -17,6 +17,8 @@ def init_opengl(screen_width, screen_height):
     gluPerspective(45, (screen_width / screen_height), 0.1, 100.0)
     glMatrixMode(GL_MODELVIEW)
 
+
+
 def main():
     screen_width = 1280
     screen_height = 720
@@ -238,7 +240,7 @@ def main():
         glColor3f(1.0, 1.0, 1.0)
         track.draw()
         glPopMatrix()
-        glColor3f(1.0, 0.0, 0.0)
+        glColor3f(1.0, 1.0, 1.0)
         
 
         #arch sweep
@@ -256,6 +258,14 @@ def main():
             nY = rad * math.cos(ang) + 1.3
             elbow.translate_draw_elbow([15, nY, nZ], [math.degrees(ang), 1, 0, 0], cylRad, cylLen, cylAng, cylSeg)
             elbow.translate_draw_elbow([15, nY, -nZ], [-math.degrees(ang)-180, 1, 0, 0], cylRad, cylLen, cylAng, cylSeg)
+        #end arch sweep
+        glColor3f(1, 1, 1)
+        wand_hand = obj.object()
+        wand_hand.load_file('objects/wand_hand.obj')
+        wand_hand.load_texture('textures/morph_wand_handle.png')
+        wand_hand.scale(10, 10, 10)
+        
+        wand_hand.translate_draw([10, -2.5, 10], [0, 0, 0])
         
         pygame.display.flip()
         clock.tick(60)
