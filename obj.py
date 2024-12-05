@@ -103,18 +103,33 @@ class object:
             self.load_texture('textures/oak.png')
     
     def hierarchy(self,x,y,z,axis):
-        axis = 2
-        if axis == 0: #x_axis
-            glRotatef(self.frameNum, 1, 0, 0)
-        elif axis == 1: #y_axis
-            glRotatef(self.frameNum, 0, 1, 0)
-        elif axis == 2: #z_axis
-            glRotatef(self.frameNum, 0, 0, 1)
+        numx = 0
+        numy = 0
+        numz = 0
+        numv = 0
+        
+        for vertex_id in self.vertices: #finds center of obj
+            numx += vertex_id[0]
+            numy += vertex_id[1]
+            numz += vertex_id[2]
+            numv += 1
+        numx = numx / numv
+        numy = numy / numv
+        numz = numz / numv
+
         glTranslatef(x,y,z)
+        glTranslatef(numx,numy,numz)
+        if axis == 0: #x_axis
+            glRotatef(self.frameNum*2, 1, 0, 0)
+        elif axis == 1: #y_axis
+            glRotatef(self.frameNum*2, 0, 1, 0)
+        elif axis == 2: #z_axis
+            glRotatef(self.frameNum*2, 0, 0, 1)
+        glTranslatef(-numx,-numy,-numz)
         self.draw()
         
         self.frameNum += 1
-        if self.frameNum >= 360:
+        if self.frameNum >= 180:
             self.frameNum = 0
     
     def scale(self, x=1.0, y=1.0, z=1.0):
