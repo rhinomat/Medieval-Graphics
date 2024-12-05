@@ -17,6 +17,7 @@ class object:
         self.y : float = 0.0
         self.z : float = 0.0
         self.texture_id : int = None
+        self.frameNum = 0
 
     def __del__(self):
         if self.texture_id:
@@ -100,6 +101,21 @@ class object:
             self.load_texture('textures/spruce.png')
         else:
             self.load_texture('textures/oak.png')
+    
+    def hierarchy(self,x,y,z,axis):
+        axis = 2
+        if axis == 0: #x_axis
+            glRotatef(self.frameNum, 1, 0, 0)
+        elif axis == 1: #y_axis
+            glRotatef(self.frameNum, 0, 1, 0)
+        elif axis == 2: #z_axis
+            glRotatef(self.frameNum, 0, 0, 1)
+        glTranslatef(x,y,z)
+        self.draw()
+        
+        self.frameNum += 1
+        if self.frameNum >= 360:
+            self.frameNum = 0
     
     def scale(self, x=1.0, y=1.0, z=1.0):
         self.vertices = [(vx * x, vy * y, vz * z) for vx, vy, vz in self.vertices]
