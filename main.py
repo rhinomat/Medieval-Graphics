@@ -17,8 +17,6 @@ def init_opengl(screen_width, screen_height):
     gluPerspective(45, (screen_width / screen_height), 0.1, 100.0)
     glMatrixMode(GL_MODELVIEW)
 
-
-
 def main():
     screen_width = 1280
     screen_height = 720
@@ -77,6 +75,7 @@ def main():
     elbow = obj.object()    
     pyramid = obj.object()
     pyramid.load_file("objects/pyramid_sub.obj")
+    pyramid_vert = pyramid.vertices.copy()
     pyramid.normalize_to_sphere()
     # Camera parameters
     camera_radius = 40
@@ -315,6 +314,10 @@ def main():
             subdivision_triggered = True
         elif not keys[K_LALT]:
             subdivision_triggered = False
+        if keys[K_1]:
+            pyramid = obj.object()
+            pyramid.load_file('objects/pyramid_sub.obj')
+            pyramid.normalize_to_sphere()
         glPushMatrix()
         glColor3f(1, 0, 1)      
         pyramid.translate_draw([10, 6.2, 6.2], [45, -1, 0, 0])
