@@ -84,7 +84,8 @@ def main():
     clock = pygame.time.Clock()
     running = True
     move_speed = 2  # Speed of movement
-
+    follow_car = False
+    ride_mode = False
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -114,12 +115,16 @@ def main():
         if keys[K_s]:
             camera_radius += 0.5
         if keys[K_l]:
-            pass
+            follow_car = not follow_car
+        if keys[K_r]:
+            ride_mode = not ride_mode
         if keys[K_SPACE]:
             # Reset camera
             camera_radius = 20
             camera_angle_x = 45
             camera_angle_y = 45
+            follow_car = False
+            ride_mode = False
         if keys[K_ESCAPE]:
             running = False
 
@@ -127,17 +132,41 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
 
-        # Calculate camera position using spherical coordinates
-        camera_x = camera_radius * math.sin(math.radians(camera_angle_y)) * math.cos(math.radians(camera_angle_x))
-        camera_y = camera_radius * math.sin(math.radians(camera_angle_x))
-        camera_z = camera_radius * math.cos(math.radians(camera_angle_y)) * math.cos(math.radians(camera_angle_x))
+        if ride_mode:
+            # Get the car position and orientation
+            car_position, car_tangent = track.get_car_orientation()
+            if car_position is not None and car_tangent is not None:
+                # Set the camera position to the car position
+                camera_x, camera_y, camera_z = car_position
 
-        # Set up the camera
-        gluLookAt(
-            camera_x, camera_y, camera_z,  # Camera position
-            target_position[0], target_position[1], target_position[2],  # Look at the center of the object
-            0, 1, 0  # Up direction
-        )
+                # Calculate the look-at position based on the car's orientation
+                look_at_x = camera_x + car_tangent[0]
+                look_at_y = camera_y + car_tangent[1]
+                look_at_z = camera_z + car_tangent[2]
+
+                # Set up the camera
+                gluLookAt(
+                    camera_x, camera_y, camera_z,  # Camera position
+                    look_at_x, look_at_y, look_at_z,  # Look at the direction of the car
+                    0, 1, 0  # Up direction
+                )
+        else:
+            if follow_car:
+                car_position = track.get_car_position()
+                if car_position is not None:
+                    target_position = car_position
+
+            # Calculate camera position using spherical coordinates
+            camera_x = camera_radius * math.sin(math.radians(camera_angle_y)) * math.cos(math.radians(camera_angle_x)) + target_position[0]
+            camera_y = camera_radius * math.sin(math.radians(camera_angle_x)) + target_position[1]
+            camera_z = camera_radius * math.cos(math.radians(camera_angle_y)) * math.cos(math.radians(camera_angle_x)) + target_position[2]
+
+            # Set up the camera
+            gluLookAt(
+                camera_x, camera_y, camera_z,  # Camera position
+                target_position[0], target_position[1], target_position[2],  # Look at the center of the object
+                0, 1, 0  # Up direction
+            )
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
         object_1.draw()

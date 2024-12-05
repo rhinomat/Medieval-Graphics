@@ -254,3 +254,15 @@ class Track:
             self.speed = 0.0
         else:
             self.speed = math.sqrt(2.0 * (self.TRAIN_ENERGY - 9.81 * point[2]))
+    
+    def get_car_position(self):
+        if not self.initialized:
+            return None
+        return self.track.evaluate_point(self.posn_on_track)
+    def get_car_orientation(self):
+        if not self.initialized:
+            return None, None
+        posn = self.track.evaluate_point(self.posn_on_track)
+        tangent = self.track.evaluate_derivative(self.posn_on_track)
+        tangent = tangent / np.linalg.norm(tangent)
+        return posn, tangent
