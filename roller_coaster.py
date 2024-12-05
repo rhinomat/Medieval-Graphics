@@ -225,13 +225,19 @@ class Track:
         tangent = self.track.evaluate_derivative(self.posn_on_track)
         tangent = tangent / np.linalg.norm(tangent)
 
-        angle1 = math.atan2(tangent[1], tangent[0]) * 180.0 / math.pi
-        angle2 = math.asin(-tangent[2]) * 180.0 / math.pi
+        #angle1 = math.atan2(tangent[1], tangent[0]) * 180.0 / math.pi
+        #angle2 = math.asin(-tangent[2]) * 180.0 / math.pi
+        angle1 = math.degrees(math.atan2(tangent[1], tangent[0]))
+        angle2 = math.degrees(math.asin(-tangent[2]))
 
 
         # Draw the train model using translate_draw with combined rotation
-        self.train_model.translate_draw(cor=posn, rot=(angle1, 0, 1.0, 1.0))
-
+        #self.train_model.translate_draw(cor=posn, rot=(angle1, 0, 1.0, 0))
+        #self.train_model.translate_draw(cor=posn, rot=(angle2, 1.0, 0, 0))
+        glTranslatef(*posn)
+        glRotatef(angle1, 0, 1, 0)
+        glRotatef(angle2, 1, 0, 0)
+        self.train_model.draw()
         glPopMatrix()
 
     def update(self, dt):
