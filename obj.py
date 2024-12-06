@@ -133,11 +133,15 @@ class object:
             self.frameNum = 0
     
     def hierarchyDropper(self,x,y,z):
-        glTranslatef(x,self.frameNum,z)
+        if self.frameNum <= 6:
+            glTranslatef(x,self.frameNum,z)
+        else:
+            glTranslatef(x,6-(2*(self.frameNum-6)),z)
         self.draw()
         
+        
         self.frameNum += 1
-        if self.frameNum >= 6:
+        if self.frameNum >= 9:
             self.frameNum = 0.5
             
 
