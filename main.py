@@ -55,6 +55,18 @@ def main():
     wheel_base.load_texture('textures/wheelBase.png')
     wheel_base.scale(3,3,3)
 
+    dropper_pole = obj.object()
+    dropper_pole.load_file('objects/dropperPole.obj')
+    dropper_pole.scale_texture(1)
+    dropper_pole.load_texture('textures/dropperPole.png')
+    dropper_pole.scale(2,3,2)
+
+    dropper_car = obj.object()
+    dropper_car.load_file('objects/dropperCar.obj')
+    dropper_car.scale_texture(1)
+    dropper_car.load_texture('textures/dropperCar.png')
+    dropper_car.scale(2,3,2)
+
     tree = obj.object()
     tree.load_file('objects/tree.obj')
     tree.scale_texture(1)
@@ -251,12 +263,23 @@ def main():
         #ferris wheel
         glPushMatrix()
         #x=0, y=0.3, z=-15, axis=z
-        wheel.hierarchy(0,0.3,-15,2) 
+        wheel.hierarchyWheel(0,0.3,-15,2) 
         glPopMatrix()
 
         glPushMatrix()
         glColor3f(1.0, 1.0, 1.0)
         wheel_base.translate_draw([0,0.3,-15],[0,0,0,0])
+        glPopMatrix()
+
+        #dropper ride
+        glPushMatrix()
+        glColor3f(1.0, 1.0, 1.0)
+        dropper_pole.translate_draw([-10,0.3,-7],[0,0,0,0])
+        glPopMatrix()
+
+        glPushMatrix()
+        glColor3f(1.0, 1.0, 1.0)
+        dropper_car.hierarchyDropper(-10,0.3,-7) 
         glPopMatrix()
 
         #parameterized trees

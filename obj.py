@@ -102,7 +102,7 @@ class object:
         else:
             self.load_texture('textures/oak.png')
     
-    def hierarchy(self,x,y,z,axis):
+    def hierarchyWheel(self,x,y,z,axis):
         numx = 0
         numy = 0
         numz = 0
@@ -131,6 +131,16 @@ class object:
         self.frameNum += 1
         if self.frameNum >= 180:
             self.frameNum = 0
+    
+    def hierarchyDropper(self,x,y,z):
+        glTranslatef(x,self.frameNum,z)
+        self.draw()
+        
+        self.frameNum += 1
+        if self.frameNum >= 6:
+            self.frameNum = 0.5
+            
+
     
     def scale(self, x=1.0, y=1.0, z=1.0):
         self.vertices = [(vx * x, vy * y, vz * z) for vx, vy, vz in self.vertices]
