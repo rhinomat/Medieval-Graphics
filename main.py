@@ -75,7 +75,6 @@ def main():
     elbow = obj.object()    
     pyramid = obj.object()
     pyramid.load_file("objects/pyramid_sub.obj")
-    pyramid_vert = pyramid.vertices.copy()
     pyramid.normalize_to_sphere()
     # Camera parameters
     camera_radius = 40
@@ -89,7 +88,7 @@ def main():
     follow_car = False
     ride_mode = False
     subdivision_triggered = False
-
+    octa_ticker = 0
 
     while running:
         for event in pygame.event.get():
@@ -300,9 +299,31 @@ def main():
         wand_hand.translate_draw([10, -2.5, 10], [0, 0, 0])
         glPopMatrix()
         #subdivision
-        
+        glPushMatrix()
+        glDisable(GL_TEXTURE_2D)
+        glColor3f(1, 1, 1)
+        glColor3f(160/255,32/255,240/255)
+        if octa_ticker == 0:
+            octa = obj.object()
+            octa.load_file('objects/octahedron.obj')
+            octa_ticker += 1
+        elif octa_ticker == 1:
+            octa.subdivide()
+            octa.normalize_to_sphere
+            octa_ticker += 1
+        elif octa_ticker == 2:
+            octa.subdivide()
+            octa.normalize_to_sphere
+            octa_ticker += 1
+        elif octa_ticker == 3:
+            octa.subdivide()
+            octa.normalize_to_sphere
+            octa_ticker = 0
+        octa.translate_draw([5, 0, 10], [0, 0, 0, 0])
+        glEnable(GL_TEXTURE_2D)
+        glPopMatrix()
 
-        #pyramid.load_texture("textures/pyramid.png")
+
         sign_post = obj.object()
         sign_post.load_file("objects/Sign_Post.obj")
         sign_post.load_texture("textures/sign_post.png")
@@ -319,8 +340,11 @@ def main():
             pyramid.load_file('objects/pyramid_sub.obj')
             pyramid.normalize_to_sphere()
         glPushMatrix()
-        glColor3f(1, 0, 1)      
+        glDisable(GL_TEXTURE_2D)
+        glColor3f(1, 1, 1)    
+        glColor3f(0, 0, 1)      
         pyramid.translate_draw([10, 6.2, 6.2], [45, -1, 0, 0])
+        glEnable(GL_TEXTURE_2D)
         glPopMatrix()
         pygame.display.flip()
         clock.tick(60)
