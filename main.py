@@ -240,7 +240,11 @@ def main():
         corner.translate_draw([-20, 0, 20], [0, 0, 0, 0])
         corner.translate_draw([-20, 0, -20], [0, 0, 0, 0])
 
-        statue.translate_draw([0, 10, 10], [0, 0, 0, 0])
+        statue.translate_draw([21, 0, 3], [90, 0, -1, 0])
+        statue.translate_draw([21, 0, -3], [90, 0, -1, 0])
+        statue.translate_draw([21, 0, 6], [90, 0, -1, 0])
+        statue.translate_draw([21, 0, -6], [90, 0, -1, 0])
+
 
 
 
