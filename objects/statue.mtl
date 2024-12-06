@@ -1,0 +1,12 @@
+# Blender 4.3.0 MTL File: 'None'
+# www.blender.org
+
+newmtl m_40c470f3-3140-9abf-252e-b7a830eab759
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd /home/ryan/Desktop/CS447P_Final_Project_R_H/statue_wiz.png

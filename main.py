@@ -60,6 +60,10 @@ def main():
     tree.scale_texture(1)
     tree.scale(2,2.5,2)
 
+    statue = obj.object()
+    statue.load_file('objects/statue.obj')
+    statue.load_texture('textures/statue_wiz.png')
+
     entrance = obj.object()
     entrance.load_file('objects/entrance.obj')
     entrance.scale_texture(1)
@@ -235,6 +239,9 @@ def main():
         corner.translate_draw([20, 0, -20], [0, 0, 0, 0])
         corner.translate_draw([-20, 0, 20], [0, 0, 0, 0])
         corner.translate_draw([-20, 0, -20], [0, 0, 0, 0])
+
+        statue.translate_draw([0, 10, 10], [0, 0, 0, 0])
+
 
 
         #ferris wheel
