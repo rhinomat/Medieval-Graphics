@@ -6,6 +6,7 @@
 ### PyGame
 ## Other Tools
 ### Blender
+### BlockBench
 ---
 # Topic: An Amusement Park
 ## Due: 5PM 12/06 at the latest
@@ -46,27 +47,3 @@
 | Right Arrow | Rotate Right|
 | Spacebar | Reset to Initial Coordinates|
 | Escape | Leave |
-## Managing Repo
-### To Update Changes: 
-#### git pull
-### To Push Changes: 
-#### git add . 
-#### git commit -m "Message"
-#### git push
-# Eval before grading
-## Texture Mapping
-### Check Walls, Corners, entrance, exit, ride and roller coaster car
-## Hierarchical animated model
-### if we can get ferris wheel to work, check that
-## parametric instancing
-### check trees and walls
-## Sweep Objects
-### Check archway and possibly when Ryan puts it in, elbow statues
-## Subdivision
-### Still need to do
-## Change the Navigation System
-### Still need to do
-## Modeling Using Software
-### Check everything except platform
-## Aesthetics
-### Medieval???
